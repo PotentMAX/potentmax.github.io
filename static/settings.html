@@ -702,6 +702,7 @@
             <div class="section">
               <div class="section-title">Projects</div>
               <div class="card">
+                <!-- Custom Default Project -->
                 <div class="setting-row">
                   <div class="setting-info">
                     <div class="setting-title">Custom Default Project</div>
@@ -728,6 +729,22 @@
                     <button type="button" class="preset-btn" data-id="1051157469">Dango Cat</button>
                     <button type="button" class="preset-btn" data-id="432688418">Blank</button>
                   </div>
+                </div>
+
+                <!-- Picture in Picture -->
+                <div class="setting-row">
+                  <div class="setting-info">
+                    <div class="setting-title">Picture in Picture</div>
+                    <div class="setting-description">Enable or disable Picture in Picture for projects.</div>
+                  </div>
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      id="pip-enabled-toggle"
+                      aria-label="Enable Picture in Picture"
+                    >
+                    <span class="slider"></span>
+                  </label>
                 </div>
               </div>
             </div>
@@ -843,6 +860,7 @@
       const MOBILE_TOUCH_CONTROLS_KEY = "cattymod:mobileTouchControls";
       const GPT_ENABLED_KEY = "cattymod:gptEnabled";
       const LOGO_VISIBLE_KEY = "cattymod:logoVisible";
+      const PIP_ENABLED_KEY = "cattymod:pipEnabled";
 
       /* ------------------------- Theme ------------------------- */
       const darkModeSelect = document.getElementById("dark-mode-select");
@@ -1188,6 +1206,36 @@
         });
       }
 
+      /* ------------------------- Picture in Picture ------------------------- */
+      const pipEnabledToggle = document.getElementById("pip-enabled-toggle");
+
+      function getPipEnabled() {
+        // Enabled by default. Only the literal string "false" disables PiP.
+        return localStorage.getItem(PIP_ENABLED_KEY) !== "false";
+      }
+
+      function loadPipEnabled() {
+        if (!pipEnabledToggle) return;
+
+        pipEnabledToggle.checked = getPipEnabled();
+        applySettingsAccent();
+      }
+
+      function setPipEnabled(enabled) {
+        localStorage.setItem(
+          PIP_ENABLED_KEY,
+          enabled ? "true" : "false"
+        );
+
+        loadPipEnabled();
+      }
+
+      if (pipEnabledToggle) {
+        pipEnabledToggle.addEventListener("change", () => {
+          setPipEnabled(pipEnabledToggle.checked);
+        });
+      }
+
       /* ------------------------- Custom Default Project ------------------------- */
       const customProjectToggle = document.getElementById("custom-project-toggle");
       const customProjectOptions = document.getElementById("custom-project-options");
@@ -1390,6 +1438,10 @@
         if (event.key === LOGO_VISIBLE_KEY || event.key === null) {
           loadLogoVisible();
         }
+
+        if (event.key === PIP_ENABLED_KEY || event.key === null) {
+          loadPipEnabled();
+        }
       });
 
       /* ------------------------- Navigation Position ------------------------- */
@@ -1444,6 +1496,7 @@
       loadMobileTouchControls();
       loadGptEnabled();
       loadLogoVisible();
+      loadPipEnabled();
       loadNavPosition();
       loadPageFromHash();
     </script>
