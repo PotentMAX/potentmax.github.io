@@ -595,7 +595,7 @@ isCattyModLogoVisible () {
 const navPos = (() => {
     try {
         const value = window.localStorage.getItem('cattymod:navPos');
-        return ['Left', 'Middle', 'Right'].includes(value) ? value : 'Left';
+        return ['Left', 'Middle', 'Right'].includes(value) ? value : 'Middle';
     } catch (e) {
         return 'Middle';
     }
