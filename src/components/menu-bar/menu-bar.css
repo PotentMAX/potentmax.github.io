@@ -286,3 +286,17 @@
     margin-right: 0;
     margin-left: 0.5rem;
 }
+
+
+.navPosLeft .mainMenu {
+    justify-content: flex-start;
+}
+
+.navPosMiddle .mainMenu {
+    justify-content: center;
+}
+
+.navPosRight .mainMenu {
+    justify-content: flex-end;
+}
+
