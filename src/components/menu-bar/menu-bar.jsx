@@ -566,7 +566,7 @@ const navPos = (() => {
         const value = window.localStorage.getItem('cattymod:navPos');
         return ['Left', 'Middle', 'Right'].includes(value) ? value : 'Left';
     } catch (e) {
-        return 'Left';
+        return 'Middle';
     }
 })();
 
