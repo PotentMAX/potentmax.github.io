@@ -27,6 +27,7 @@ import DeletionRestorer from '../../containers/deletion-restorer.jsx';
 import TurboMode from '../../containers/turbo-mode.jsx';
 import MenuBarHOC from '../../containers/menu-bar-hoc.jsx';
 import SettingsMenu from './settings-menu.jsx';
+import openStagePiP from '../../lib/stage-pip.js';
 
 import FramerateChanger from '../../containers/tw-framerate-changer.jsx';
 import ChangeUsername from '../../containers/tw-change-username.jsx';
@@ -262,6 +263,34 @@ constructor (props) {
         }
     }
 
+    
+    // Show Picture in Picture by default unless explicitly disabled.
+    // Never show it inside an embedded editor.
+    isPiPButtonVisible () {
+        if (window.parent !== window) {
+            return false;
+        }
+
+        try {
+            const enabled = window.localStorage.getItem(
+                'cattymod:pipEnabled'
+            );
+            return enabled === null || enabled === 'true';
+        } catch (e) {
+            return false;
+        }
+    }
+
+    handleClickPiP () {
+        if (!this.isPiPButtonVisible()) {
+            return;
+        }
+
+        openStagePiP(this.props.vm);
+        this.props.onRequestCloseEdit();
+    }
+
+    
     handleClickGpt () {
         if (!this.isGptButtonVisible()) {
             return;
@@ -1365,7 +1394,46 @@ const menuBar = (
                                             </svg>
                                             CattyMod Copilot
                                         </MenuItem>
+                                        
                                     )}
+
+                                    
+                                    {/* CattyMod Picture in Picture */}
+                                    {this.isPiPButtonVisible() && (
+                                        <MenuItem
+                                            isRtl={this.props.isRtl}
+                                            onClick={this.handleClickPiP}
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                strokeWidth="2"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                            >
+                                                <rect
+                                                    x="3"
+                                                    y="4"
+                                                    width="18"
+                                                    height="16"
+                                                    rx="2"
+                                                />
+                                                <rect
+                                                    x="12"
+                                                    y="12"
+                                                    width="7"
+                                                    height="5"
+                                                    rx="1"
+                                                />
+                                            </svg>
+                                            Picture in Picture
+                                        </MenuItem>
+                                    )}
+
 
                                     <CloudVariablesToggler>
                                         {(toggleCloudVariables, {enabled, canUseCloudVariables}) => (
