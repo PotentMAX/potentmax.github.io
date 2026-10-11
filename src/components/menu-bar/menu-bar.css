@@ -288,15 +288,15 @@
 }
 
 
-.navPosLeft .mainMenu {
+.navPosLeft .main-menu {
     justify-content: flex-start;
 }
 
-.navPosMiddle .mainMenu {
+.navPosMiddle .main-menu {
     justify-content: center;
 }
 
-.navPosRight .mainMenu {
+.navPosRight .main-menu {
     justify-content: flex-end;
 }
 
