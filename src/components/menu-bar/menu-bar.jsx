@@ -665,7 +665,7 @@ const menuBar = (
                     alt=""
                     draggable={false}
                     width={20}
-                    height={25}
+                    height={24.5}
                 />
                 <span className={styles.collapsibleLabel}>
                     CattyMod
