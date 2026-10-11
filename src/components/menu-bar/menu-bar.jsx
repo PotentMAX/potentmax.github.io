@@ -638,41 +638,36 @@ const menuBar = (
                 
 <div className={styles.mainMenu}>
     <div className={styles.fileGroup}>
-        {this.isCattyModLogoVisible() && (
-            <button
-                type="button"
-                className={classNames(
-                    styles.menuBarItem,
-                    styles.hoverable
-                )}
-                onClick={this.handleClickCattyMod}
-                aria-label="CattyMod"
-                title="CattyMod"
-                style={{
-    display: 'flex',
-    alignItems: 'center',
-    gap: '6px',
-    appearance: 'none',
-    border: 'none',
-    background: 'transparent',
-    cursor: 'pointer',
-    color: 'inherit',
-    font: 'inherit',
-    padding: '0 8px'
-}}
-            >
-                <img
-                    src="https://cattymod.app/assets/cattymod-empty.png"
-                    alt=""
-                    draggable={false}
-                    width={20}
-                    height={24.5}
-                />
-                <span className={styles.collapsibleLabel}>
-                    CattyMod
-                </span>
-            </button>
+{this.isCattyModLogoVisible() && (
+    <div
+        className={classNames(
+            styles.menuBarItem,
+            styles.hoverable
         )}
+        onClick={this.handleClickCattyMod}
+        role="button"
+        tabIndex={0}
+        aria-label="CattyMod"
+        title="CattyMod"
+        onKeyDown={event => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                this.handleClickCattyMod();
+            }
+        }}
+    >
+        <img
+            src="https://cattymod.app/assets/cattymod-empty.png"
+            alt=""
+            draggable={false}
+            width={20}
+            height={24.5}
+        />
+        <span className={styles.collapsibleLabel}>
+            CattyMod
+        </span>
+    </div>
+)}
 
         {this.props.errors.length > 0 && (
                             <div>
