@@ -663,9 +663,9 @@ const menuBar = (
             width={20}
             height={24.5}
         />
-        <span className={styles.collapsibleLabel}>
+        <h4 className={styles.collapsibleLabel}>
             CattyMod
-        </span>
+        </h4>
     </div>
 )}
 
