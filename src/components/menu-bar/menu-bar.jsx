@@ -649,15 +649,17 @@ const menuBar = (
                 aria-label="CattyMod"
                 title="CattyMod"
                 style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    border: 'none',
-                    cursor: 'pointer',
-                    color: 'inherit',
-                    font: 'inherit',
-                    padding: '0 8px'
-                }}
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+    appearance: 'none',
+    border: 'none',
+    background: 'transparent',
+    cursor: 'pointer',
+    color: 'inherit',
+    font: 'inherit',
+    padding: '0 8px'
+}}
             >
                 <img
                     src="https://cattymod.app/assets/cattymod-empty.png"
