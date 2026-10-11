@@ -653,7 +653,6 @@ const menuBar = (
                     alignItems: 'center',
                     gap: '6px',
                     border: 'none',
-                    background: 'transparent',
                     cursor: 'pointer',
                     color: 'inherit',
                     font: 'inherit',
