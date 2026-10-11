@@ -236,7 +236,9 @@ constructor (props) {
         'restoreOptionMessage',
         'handleClickGoHome',
         'handleClickGpt',
-        'handleClickCattyMod'
+        'handleClickCattyMod',
+        'handleClickPiP',
+        'isPiPButtonVisible'
     ]);
 }
 
