@@ -212,30 +212,32 @@ MenuItemLink.propTypes = {
 };
 
 class MenuBar extends React.Component {
-    constructor (props) {
-        super(props);
-        bindAll(this, [
-            'handleClickSeeInside',
-            'handleClickNew',
-            'handleClickNewWindow',
-            'handleClickNewTab',
-            'handleClickRemix',
-            'handleClickSave',
-            'handleClickSaveAsCopy',
-            'handleClickPackager',
-            'handleClickDesktopSettings',
-            'handleClickRestorePoints',
-            'handleClickSeeCommunity',
-            'handleClickShare',
-            'handleSetMode',
-            'handleKeyPress',
-            'handleRestoreOption',
-            'getSaveToComputerHandler',
-            'restoreOptionMessage',
-            'handleClickGoHome',
-            'handleClickGpt'
-        ]);
-    }
+    
+constructor (props) {
+    super(props);
+    bindAll(this, [
+        'handleClickSeeInside',
+        'handleClickNew',
+        'handleClickNewWindow',
+        'handleClickNewTab',
+        'handleClickRemix',
+        'handleClickSave',
+        'handleClickSaveAsCopy',
+        'handleClickPackager',
+        'handleClickDesktopSettings',
+        'handleClickRestorePoints',
+        'handleClickSeeCommunity',
+        'handleClickShare',
+        'handleSetMode',
+        'handleKeyPress',
+        'handleRestoreOption',
+        'getSaveToComputerHandler',
+        'restoreOptionMessage',
+        'handleClickGoHome',
+        'handleClickGpt',
+        'handleClickCattyMod'
+    ]);
+}
 
     componentDidMount () {
         document.addEventListener('keydown', this.handleKeyPress);
@@ -271,6 +273,26 @@ class MenuBar extends React.Component {
             'noopener,noreferrer'
         );
     }
+
+    
+handleClickCattyMod () {
+    const url = 'https://cattymod.app';
+
+    if (window.parent !== window) {
+        window.open(url, '_blank', 'noopener,noreferrer');
+    } else {
+        window.location.href = url;
+    }
+}
+
+isCattyModLogoVisible () {
+    try {
+        return window.localStorage.getItem('cattymod:logoVisible') !== 'false';
+    } catch (e) {
+        return true;
+    }
+}
+
 
     handleClickNew () {
         const readyToReplaceProject =
@@ -544,7 +566,7 @@ const navPos = (() => {
         const value = window.localStorage.getItem('cattymod:navPos');
         return ['Left', 'Middle', 'Right'].includes(value) ? value : 'Left';
     } catch (e) {
-        return 'Left';
+        return 'Middle';
     }
 })();
 
@@ -613,9 +635,41 @@ const menuBar = (
         )}
     >
 
-                <div className={styles.mainMenu}>
-                    <div className={styles.fileGroup}>
-                        {this.props.errors.length > 0 && (
+                
+<div className={styles.mainMenu}>
+    <div className={styles.fileGroup}>
+{this.isCattyModLogoVisible() && (
+    <div
+        className={classNames(
+            styles.menuBarItem,
+            styles.hoverable
+        )}
+        onClick={this.handleClickCattyMod}
+        role="button"
+        tabIndex={0}
+        aria-label="CattyMod"
+        title="CattyMod"
+        onKeyDown={event => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                this.handleClickCattyMod();
+            }
+        }}
+    >
+        <img
+            src="https://cattymod.app/assets/cattymod-empty.png"
+            alt=""
+            draggable={false}
+            width={20}
+            height={24.5}
+        />
+        <h4 className={styles.collapsibleLabel}>
+            CattyMod
+        </h4>
+    </div>
+)}
+
+        {this.props.errors.length > 0 && (
                             <div>
                                 <MenuLabel
                                     open={this.props.errorsMenuOpen}

@@ -288,7 +288,7 @@
         gap: 20px;
       }
 
-      .setting-row+.setting-row {
+      .setting-row + .setting-row {
         border-top: 1px solid var(--border);
       }
 
@@ -363,18 +363,23 @@
         transition: 0.2s ease;
       }
 
-      .switch input:checked+.slider {
+      .switch input:checked + .slider {
         background: var(--accent);
       }
 
-      .switch input:checked+.slider.rainbow-accent {
+      .switch input:checked + .slider.rainbow-accent {
         background: var(--accent-gradient) !important;
         background-size: 200% 100%;
         animation: rainbow-shift 4s linear infinite;
       }
 
-      .switch input:checked+.slider::before {
+      .switch input:checked + .slider::before {
         transform: translateX(20px);
+      }
+
+      .switch input:focus-visible + .slider {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
       }
 
       /* Rainbow text */
@@ -550,6 +555,7 @@
       }
     </style>
   </head>
+
   <body>
     <div class="app">
       <aside class="sidebar">
@@ -560,6 +566,7 @@
             <div class="brand-subtitle">Settings</div>
           </div>
         </div>
+
         <nav class="nav">
           <button class="nav-button active" data-page="general">
             <i data-lucide="settings"></i>
@@ -579,6 +586,7 @@
             <span class="nav-text">About</span>
           </button>
         </nav>
+
         <div class="sidebar-bottom">
           <button class="nav-button back-button" id="back-to-cattymod">
             <i data-lucide="door-open"></i>
@@ -587,6 +595,7 @@
           <div class="sidebar-footer-text">CattyMod Settings</div>
         </div>
       </aside>
+
       <main class="main">
         <div class="content">
           <!-- GENERAL -->
@@ -595,6 +604,7 @@
               <h1>General</h1>
               <p>Change how CattyMod looks and behaves.</p>
             </div>
+
             <div class="section">
               <div class="section-title">Appearance</div>
               <div class="card">
@@ -610,6 +620,7 @@
                     <option value="midnight">Midnight</option>
                   </select>
                 </div>
+
                 <!-- Block Style -->
                 <div class="setting-row">
                   <div class="setting-info">
@@ -622,6 +633,7 @@
                     <option value="dark">Dark (Beta)</option>
                   </select>
                 </div>
+
                 <!-- Go Icon -->
                 <div class="setting-row">
                   <div class="setting-info">
@@ -635,6 +647,7 @@
                     <option value="purpleflag">Purple Flag</option>
                   </select>
                 </div>
+
                 <!-- Accent -->
                 <div class="setting-row">
                   <div class="setting-info">
@@ -653,11 +666,12 @@
                     <option value="rainbow">Rainbow</option>
                   </select>
                 </div>
+
                 <!-- Navigation Position -->
                 <div class="setting-row">
                   <div class="setting-info">
                     <div class="setting-title">Navigation Position</div>
-                    <div class="setting-description"> Choose how navbar items should be aligned. </div>
+                    <div class="setting-description">Choose how navbar items should be aligned.</div>
                   </div>
                   <select id="nav-position-select" class="setting-select" aria-label="Navigation Position">
                     <option value="Left">Left</option>
@@ -665,8 +679,26 @@
                     <option value="Right">Right</option>
                   </select>
                 </div>
+
+                <!-- CattyMod Navbar Logo -->
+                <div class="setting-row">
+                  <div class="setting-info">
+                    <div class="setting-title">CattyMod Navbar Logo</div>
+                    <div class="setting-description">Show or hide the CattyMod logo in the navbar.</div>
+                  </div>
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      id="logo-visible-toggle"
+                      aria-label="Show CattyMod navbar logo"
+                    >
+                    <span class="slider"></span>
+                  </label>
+                </div>
               </div>
             </div>
+
+            <!-- PROJECTS -->
             <div class="section">
               <div class="section-title">Projects</div>
               <div class="card">
@@ -680,9 +712,17 @@
                     <span class="slider"></span>
                   </label>
                 </div>
+
                 <div id="custom-project-options" class="setting-options collapsed">
                   <label class="input-label" for="custom-project-id">Scratch Project ID</label>
-                  <input id="custom-project-id" class="text-input" type="text" placeholder="e.g. 1368094633" inputmode="numeric" autocomplete="off">
+                  <input
+                    id="custom-project-id"
+                    class="text-input"
+                    type="text"
+                    placeholder="e.g. 1368094633"
+                    inputmode="numeric"
+                    autocomplete="off"
+                  >
                   <div class="preset-buttons">
                     <button type="button" class="preset-btn" data-id="510186917">ScratchCat</button>
                     <button type="button" class="preset-btn" data-id="1051157469">Dango Cat</button>
@@ -691,11 +731,11 @@
                 </div>
               </div>
             </div>
+
             <!-- MOBILE -->
             <div class="section">
               <div class="section-title">Mobile</div>
               <div class="card">
-                <!-- Mobile Touch Controls -->
                 <div class="setting-row">
                   <div class="setting-info">
                     <div class="setting-title">Mobile Touch Controls</div>
@@ -708,13 +748,15 @@
                 </div>
               </div>
             </div>
+
+            <!-- AI -->
             <div class="section">
               <div class="section-title">AI</div>
               <div class="card">
                 <div class="setting-row">
                   <div class="setting-info">
                     <div class="setting-title">CattyMod Copilot</div>
-                    <div class="setting-description"> An AI assistant created by CattyMod designed to help you make projects. However, disabling Copilot will only hide the option from the Edit Menu.</div>
+                    <div class="setting-description">An AI assistant created by CattyMod designed to help you make projects. However, disabling Copilot will only hide the option from the Edit Menu.</div>
                   </div>
                   <label class="switch">
                     <input type="checkbox" id="gpt-enabled-toggle">
@@ -724,12 +766,14 @@
               </div>
             </div>
           </section>
+
           <!-- LABS -->
           <section id="page-labs" class="page" style="display: none;">
             <div class="page-header">
               <h1>Labs</h1>
               <p>Try upcoming CattyMod features and help shape the experience.</p>
             </div>
+
             <div class="section">
               <div class="section-title">CattyMod Beta</div>
               <div class="card about-card">
@@ -739,16 +783,18 @@
                   <i data-lucide="flask-conical"></i>
                   <span id="beta-button-text">Try CattyMod Beta</span>
                 </button>
-                <div class="setting-description card-desc" style="font-size: 13px; margin-top: 14px;">You can click <strong>CattyMod Feedback</strong> in the navbar to provide feedback to the experience anytime! </div>
+                <div class="setting-description card-desc" style="font-size: 13px; margin-top: 14px;">You can click <strong>CattyMod Feedback</strong> in the navbar to provide feedback to the experience anytime!</div>
               </div>
             </div>
           </section>
+
           <!-- ABOUT -->
           <section id="page-about" class="page" style="display: none;">
             <div class="page-header">
               <h1>About</h1>
               <p>Information about CattyMod's internals.</p>
             </div>
+
             <div class="card about-card">
               <div class="about-header">
                 <img class="about-logo" src="https://cattymod.app/assets/cattymod.svg" alt="CattyMod">
@@ -759,7 +805,9 @@
               </div>
               <p class="about-description">Block-based coding with tons of capabilities.</p>
             </div>
+
             <div style="height: 16px;"></div>
+
             <div class="card about-card">
               <div class="about-header">
                 <img class="about-logo" src="https://cattymod.app/assets/turbowarp.svg" alt="TurboWarp">
@@ -770,7 +818,9 @@
               </div>
               <p class="about-description">Block-based programming language.</p>
             </div>
+
             <div style="height: 16px;"></div>
+
             <div class="card about-card">
               <div class="about-header">
                 <img class="about-logo" src="https://cattymod.app/assets/scratch.svg" alt="Scratch">
@@ -785,54 +835,66 @@
         </div>
       </main>
     </div>
+
     <script>
       const THEME_KEY = "tw:theme";
       const CUSTOM_PROJECT_KEY = "cattymod:customDefaultProject";
       const GO_ICON_KEY = "cattymod:goIcon";
       const MOBILE_TOUCH_CONTROLS_KEY = "cattymod:mobileTouchControls";
       const GPT_ENABLED_KEY = "cattymod:gptEnabled";
+      const LOGO_VISIBLE_KEY = "cattymod:logoVisible";
+
       /* ------------------------- Theme ------------------------- */
       const darkModeSelect = document.getElementById("dark-mode-select");
 
       function readTheme() {
         const raw = localStorage.getItem(THEME_KEY);
         if (!raw) return null;
+
         try {
           const parsed = JSON.parse(raw);
+
           if (parsed && typeof parsed === "object") {
             return parsed;
           }
+
           if (typeof parsed === "string") {
-            return {
-              gui: parsed
-            };
+            return { gui: parsed };
           }
         } catch {
           if (raw === "dark" || raw === "light" || raw === "midnight") {
-            return {
-              gui: raw
-            };
+            return { gui: raw };
           }
         }
+
         return null;
       }
 
       function systemIsDark() {
-        return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        return window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches;
       }
 
       function getCurrentGuiTheme() {
         const theme = readTheme();
-        if (theme && (theme.gui === "dark" || theme.gui === "light" || theme.gui === "midnight")) {
+
+        if (theme && (
+          theme.gui === "dark" ||
+          theme.gui === "light" ||
+          theme.gui === "midnight"
+        )) {
           return theme.gui;
         }
+
         return systemIsDark() ? "dark" : "light";
       }
 
       function applyTheme() {
         const theme = getCurrentGuiTheme();
+
         document.body.classList.toggle("dark", theme === "dark");
         document.body.classList.toggle("midnight", theme === "midnight");
+
         if (darkModeSelect) {
           darkModeSelect.value = theme;
         }
@@ -840,11 +902,12 @@
 
       function updateTheme(updater) {
         const current = readTheme() || {};
-        const newTheme = {
-          ...current
-        };
+        const newTheme = { ...current };
+
         updater(newTheme);
+
         localStorage.setItem(THEME_KEY, JSON.stringify(newTheme));
+
         applyTheme();
         applySettingsAccent();
         loadBlockStyle();
@@ -852,15 +915,18 @@
       }
 
       function setGuiTheme(gui) {
-        if (gui !== "light" && gui !== "dark" && gui !== "midnight") {
+        if (!["light", "dark", "midnight"].includes(gui)) {
           gui = "light";
         }
+
         updateTheme(theme => {
           theme.gui = gui;
         });
       }
+
       /* ------------------------- Accent ------------------------- */
       const accentSelect = document.getElementById("accent-select");
+
       const ACCENT_COLORS = {
         red: "#e53935",
         orange: "#fb8c00",
@@ -871,38 +937,56 @@
         violet: "#8e44ad",
         purple: "#9c27b0"
       };
-      const RAINBOW_GRADIENT = "linear-gradient(90deg, #e53935, #fb8c00, #fbc02d, #43a047, #009ccc, #3949ab, #8e44ad)";
-      const ACCENT_OPTIONS = ["red", "orange", "yellow", "green", "blue", "indigo", "violet", "purple", "rainbow"];
+
+      const RAINBOW_GRADIENT =
+        "linear-gradient(90deg, #e53935, #fb8c00, #fbc02d, #43a047, #009ccc, #3949ab, #8e44ad)";
+
+      const ACCENT_OPTIONS = [
+        "red", "orange", "yellow", "green", "blue",
+        "indigo", "violet", "purple", "rainbow"
+      ];
 
       function getCurrentAccent() {
         const theme = readTheme();
-        if (theme && typeof theme.accent === "string" && ACCENT_OPTIONS.includes(theme.accent.toLowerCase())) {
+
+        if (
+          theme &&
+          typeof theme.accent === "string" &&
+          ACCENT_OPTIONS.includes(theme.accent.toLowerCase())
+        ) {
           return theme.accent.toLowerCase();
         }
+
         return "blue";
       }
 
       function applySettingsAccent() {
         const accent = getCurrentAccent();
         const root = document.documentElement;
+
         document.querySelectorAll(".rainbow-accent").forEach(element => {
           element.classList.remove("rainbow-accent");
         });
+
         document.querySelectorAll(".rainbow-text").forEach(element => {
           element.classList.remove("rainbow-text");
         });
+
         if (accent === "rainbow") {
           root.style.setProperty("--accent", "#009ccc");
           root.style.setProperty("--accent-hover", "#008db8");
           root.style.setProperty("--accent-gradient", RAINBOW_GRADIENT);
+
           document.querySelectorAll(".nav-button.active").forEach(element => {
             element.classList.add("rainbow-accent");
           });
+
           document.querySelectorAll(".switch input:checked + .slider").forEach(element => {
             element.classList.add("rainbow-accent");
           });
         } else {
           const color = ACCENT_COLORS[accent] || ACCENT_COLORS.blue;
+
           root.style.setProperty("--accent", color);
           root.style.setProperty("--accent-hover", color);
           root.style.setProperty("--accent-gradient", color);
@@ -911,6 +995,7 @@
 
       function setAccent(accent) {
         if (!ACCENT_OPTIONS.includes(accent)) return;
+
         updateTheme(theme => {
           theme.accent = accent;
         });
@@ -918,41 +1003,46 @@
 
       function loadAccent() {
         if (!accentSelect) return;
+
         accentSelect.value = getCurrentAccent();
         applySettingsAccent();
       }
+
       if (accentSelect) {
         accentSelect.addEventListener("change", () => {
           setAccent(accentSelect.value);
         });
       }
+
       /* ------------------------- Dark Mode ------------------------- */
       if (darkModeSelect) {
         darkModeSelect.addEventListener("change", () => {
           setGuiTheme(darkModeSelect.value);
         });
       }
+
       const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
       mediaQuery.addEventListener("change", () => {
         if (!localStorage.getItem(THEME_KEY)) {
           applyTheme();
           applySettingsAccent();
         }
       });
+
       /* ------------------------- Block Style ------------------------- */
       const blockStyleSelect = document.getElementById("block-style-select");
 
       function getBlockStyle() {
         const theme = readTheme();
+
         if (!theme || typeof theme.blocks !== "string") {
           return "original";
         }
-        if (theme.blocks === "high-contrast") {
-          return "high-contrast";
-        }
-        if (theme.blocks === "dark") {
-          return "dark";
-        }
+
+        if (theme.blocks === "high-contrast") return "high-contrast";
+        if (theme.blocks === "dark") return "dark";
+
         return "original";
       }
 
@@ -962,80 +1052,97 @@
             delete theme.blocks;
             return;
           }
+
           theme.blocks = style;
         });
       }
 
       function loadBlockStyle() {
         if (!blockStyleSelect) return;
+
         blockStyleSelect.value = getBlockStyle();
       }
+
       if (blockStyleSelect) {
         blockStyleSelect.addEventListener("change", () => {
           setBlockStyle(blockStyleSelect.value);
         });
       }
+
       /* ------------------------- Go Icon ------------------------- */
       const goIconSelect = document.getElementById("go-icon-select");
 
       function getCurrentGoIcon() {
         const saved = localStorage.getItem(GO_ICON_KEY);
-        if (saved === "play" || saved === "greenflag" || saved === "blueflag" || saved === "purpleflag") {
+
+        if (["play", "greenflag", "blueflag", "purpleflag"].includes(saved)) {
           return saved;
         }
+
         return "play";
       }
 
       function loadGoIcon() {
         if (!goIconSelect) return;
+
         goIconSelect.value = getCurrentGoIcon();
       }
 
       function setGoIcon(icon) {
-        if (icon !== "play" && icon !== "greenflag" && icon !== "blueflag" && icon !== "purpleflag") {
+        if (!["play", "greenflag", "blueflag", "purpleflag"].includes(icon)) {
           icon = "play";
         }
+
         localStorage.setItem(GO_ICON_KEY, icon);
         loadGoIcon();
       }
+
       if (goIconSelect) {
         goIconSelect.addEventListener("change", () => {
           setGoIcon(goIconSelect.value);
         });
       }
+
       /* ------------------------- Mobile Touch Controls ------------------------- */
-      const mobileTouchControlsToggle = document.getElementById("mobile-touch-controls-toggle");
+      const mobileTouchControlsToggle =
+        document.getElementById("mobile-touch-controls-toggle");
 
       function getMobileTouchControlsEnabled() {
-        const saved = localStorage.getItem(MOBILE_TOUCH_CONTROLS_KEY);
-        return saved !== "false";
+        return localStorage.getItem(MOBILE_TOUCH_CONTROLS_KEY) !== "false";
       }
 
       function loadMobileTouchControls() {
         if (!mobileTouchControlsToggle) return;
+
         mobileTouchControlsToggle.checked = getMobileTouchControlsEnabled();
         applySettingsAccent();
       }
 
       function setMobileTouchControlsEnabled(enabled) {
-        localStorage.setItem(MOBILE_TOUCH_CONTROLS_KEY, enabled ? "true" : "false");
+        localStorage.setItem(
+          MOBILE_TOUCH_CONTROLS_KEY,
+          enabled ? "true" : "false"
+        );
+
         loadMobileTouchControls();
       }
+
       if (mobileTouchControlsToggle) {
         mobileTouchControlsToggle.addEventListener("change", () => {
           setMobileTouchControlsEnabled(mobileTouchControlsToggle.checked);
         });
       }
+
       /* ------------------------- AI / Copilot ------------------------- */
       const gptEnabledToggle = document.getElementById("gpt-enabled-toggle");
 
       function getGptEnabled() {
-        // Default to enabled if the setting does not exist.
         return localStorage.getItem(GPT_ENABLED_KEY) !== "false";
       }
 
       function loadGptEnabled() {
         if (!gptEnabledToggle) return;
+
         gptEnabledToggle.checked = getGptEnabled();
         applySettingsAccent();
       }
@@ -1044,11 +1151,43 @@
         localStorage.setItem(GPT_ENABLED_KEY, enabled ? "true" : "false");
         loadGptEnabled();
       }
+
       if (gptEnabledToggle) {
         gptEnabledToggle.addEventListener("change", () => {
           setGptEnabled(gptEnabledToggle.checked);
         });
       }
+
+      /* ------------------------- Navbar Logo Visibility ------------------------- */
+      const logoVisibleToggle = document.getElementById("logo-visible-toggle");
+
+      function getLogoVisible() {
+        // Enabled by default. Only the literal string "false" disables the logo.
+        return localStorage.getItem(LOGO_VISIBLE_KEY) !== "false";
+      }
+
+      function loadLogoVisible() {
+        if (!logoVisibleToggle) return;
+
+        logoVisibleToggle.checked = getLogoVisible();
+        applySettingsAccent();
+      }
+
+      function setLogoVisible(visible) {
+        localStorage.setItem(
+          LOGO_VISIBLE_KEY,
+          visible ? "true" : "false"
+        );
+
+        loadLogoVisible();
+      }
+
+      if (logoVisibleToggle) {
+        logoVisibleToggle.addEventListener("change", () => {
+          setLogoVisible(logoVisibleToggle.checked);
+        });
+      }
+
       /* ------------------------- Custom Default Project ------------------------- */
       const customProjectToggle = document.getElementById("custom-project-toggle");
       const customProjectOptions = document.getElementById("custom-project-options");
@@ -1056,12 +1195,18 @@
 
       function updateCustomProjectVisibility() {
         if (!customProjectOptions || !customProjectToggle) return;
-        customProjectOptions.classList.toggle("collapsed", !customProjectToggle.checked);
+
+        customProjectOptions.classList.toggle(
+          "collapsed",
+          !customProjectToggle.checked
+        );
       }
 
       function loadCustomProject() {
         if (!customProjectToggle || !customProjectId) return;
+
         const saved = localStorage.getItem(CUSTOM_PROJECT_KEY);
+
         if (saved) {
           customProjectToggle.checked = true;
           customProjectId.value = saved;
@@ -1069,25 +1214,34 @@
           customProjectToggle.checked = false;
           customProjectId.value = "";
         }
+
         updateCustomProjectVisibility();
       }
+
       if (customProjectToggle) {
         customProjectToggle.addEventListener("change", () => {
           if (customProjectToggle.checked) {
             if (customProjectId.value.trim()) {
-              localStorage.setItem(CUSTOM_PROJECT_KEY, customProjectId.value);
+              localStorage.setItem(
+                CUSTOM_PROJECT_KEY,
+                customProjectId.value
+              );
             }
           } else {
             localStorage.removeItem(CUSTOM_PROJECT_KEY);
           }
+
           updateCustomProjectVisibility();
           applySettingsAccent();
         });
       }
+
       if (customProjectId) {
         customProjectId.addEventListener("input", () => {
           const numbersOnly = customProjectId.value.replace(/\D/g, "");
+
           customProjectId.value = numbersOnly;
+
           if (customProjectToggle.checked) {
             if (numbersOnly) {
               localStorage.setItem(CUSTOM_PROJECT_KEY, numbersOnly);
@@ -1097,36 +1251,48 @@
           }
         });
       }
+
       document.querySelectorAll(".preset-btn").forEach(btn => {
         btn.addEventListener("click", () => {
           const id = btn.dataset.id;
+
           if (customProjectId) {
             customProjectId.value = id;
           }
+
           if (customProjectToggle) {
             customProjectToggle.checked = true;
           }
+
           localStorage.setItem(CUSTOM_PROJECT_KEY, id);
+
           updateCustomProjectVisibility();
           applySettingsAccent();
         });
       });
+
       /* ------------------------- Labs / Beta ------------------------- */
       const betaButton = document.getElementById("beta-button");
       const betaButtonText = document.getElementById("beta-button-text");
       const isBeta = window.location.hostname === "beta.cattymod.app";
+
       if (isBeta) {
         const cardTitle = document.querySelector("#page-labs .card-title");
         const cardDescriptions = document.querySelectorAll("#page-labs .card-desc");
+
         if (cardTitle) {
           cardTitle.textContent = "You're on beta.cattymod.app";
         }
+
         if (cardDescriptions[0]) {
-          cardDescriptions[0].textContent = "Is CattyMod not working for you? Try going back to Studio.";
+          cardDescriptions[0].textContent =
+            "Is CattyMod not working for you? Try going back to Studio.";
         }
+
         if (betaButtonText) {
           betaButtonText.textContent = "Exit Beta";
         }
+
         if (betaButton) {
           betaButton.addEventListener("click", () => {
             window.location.href = "https://studio.cattymod.app/settings#labs";
@@ -1137,49 +1303,65 @@
           window.location.href = "https://beta.cattymod.app/settings#labs";
         });
       }
+
       /* ------------------------- Navigation ------------------------- */
       const navButtons = document.querySelectorAll(".nav-button[data-page]");
       const pages = document.querySelectorAll(".page");
 
       function showPage(pageName, updateHash = true) {
         const validPages = ["general", "labs", "about"];
+
         if (!validPages.includes(pageName)) {
           pageName = "general";
         }
+
         navButtons.forEach(button => {
-          button.classList.toggle("active", button.dataset.page === pageName);
+          button.classList.toggle(
+            "active",
+            button.dataset.page === pageName
+          );
         });
+
         pages.forEach(page => {
-          page.style.display = page.id === "page-" + pageName ? "" : "none";
+          page.style.display =
+            page.id === "page-" + pageName ? "" : "none";
         });
+
         if (updateHash) {
           history.replaceState(null, "", "#" + pageName);
         }
+
         applySettingsAccent();
       }
 
       function loadPageFromHash() {
         const hash = window.location.hash.slice(1).toLowerCase();
-        if (hash === "general" || hash === "labs" || hash === "about") {
+
+        if (["general", "labs", "about"].includes(hash)) {
           showPage(hash, false);
         } else {
           history.replaceState(null, "", "#general");
           showPage("general", false);
         }
       }
+
       navButtons.forEach(button => {
         button.addEventListener("click", () => {
           showPage(button.dataset.page);
         });
       });
+
       window.addEventListener("hashchange", loadPageFromHash);
+
       /* ------------------------- Addons ------------------------- */
       const addonsButton = document.getElementById("addons-button");
+
       if (addonsButton) {
         addonsButton.addEventListener("click", () => {
           window.open("/addons.html", "_blank", "noopener,noreferrer");
         });
       }
+
       /* ------------------------- Storage Sync ------------------------- */
       window.addEventListener("storage", event => {
         if (event.key === THEME_KEY) {
@@ -1188,16 +1370,28 @@
           loadBlockStyle();
           loadAccent();
         }
+
         if (event.key === CUSTOM_PROJECT_KEY) {
           loadCustomProject();
         }
+
         if (event.key === GO_ICON_KEY) {
           loadGoIcon();
         }
+
         if (event.key === MOBILE_TOUCH_CONTROLS_KEY) {
           loadMobileTouchControls();
         }
+
+        if (event.key === GPT_ENABLED_KEY) {
+          loadGptEnabled();
+        }
+
+        if (event.key === LOGO_VISIBLE_KEY || event.key === null) {
+          loadLogoVisible();
+        }
       });
+
       /* ------------------------- Navigation Position ------------------------- */
       const NAV_POSITION_KEY = "cattymod:navPos";
       const navPositionSelect = document.getElementById("nav-position-select");
@@ -1205,14 +1399,18 @@
       function getNavPosition() {
         try {
           const saved = localStorage.getItem(NAV_POSITION_KEY);
-          return ["Left", "Middle", "Right"].includes(saved) ? saved : "Left";
+
+          return ["Left", "Middle", "Right"].includes(saved)
+            ? saved
+            : "Middle";
         } catch {
-          return "Left";
+          return "Middle";
         }
       }
 
       function loadNavPosition() {
         if (!navPositionSelect) return;
+
         navPositionSelect.value = getNavPosition();
       }
 
@@ -1220,18 +1418,22 @@
         if (!["Left", "Middle", "Right"].includes(position)) {
           position = "Left";
         }
+
         try {
           localStorage.setItem(NAV_POSITION_KEY, position);
         } catch (error) {
           console.error("Could not save navigation position:", error);
         }
+
         loadNavPosition();
       }
+
       if (navPositionSelect) {
         navPositionSelect.addEventListener("change", () => {
           setNavPosition(navPositionSelect.value);
         });
       }
+
       /* ------------------------- Start ------------------------- */
       applyTheme();
       applySettingsAccent();
@@ -1241,31 +1443,42 @@
       loadGoIcon();
       loadMobileTouchControls();
       loadGptEnabled();
+      loadLogoVisible();
       loadNavPosition();
       loadPageFromHash();
     </script>
+
     <script>
       lucide.createIcons();
+
       document.addEventListener("DOMContentLoaded", () => {
         const params = new URLSearchParams(window.location.search);
         const from = params.get("from");
         const backButton = document.getElementById("back-to-cattymod");
-        if (!backButton) {
-          return;
-        }
-        // Default fallback
+
+        if (!backButton) return;
+
         let destination = "/";
+
         if (from) {
           try {
             const url = new URL(from);
-            const isCattyMod = url.hostname === "cattymod.app" || url.hostname.endsWith(".cattymod.app");
-            if (isCattyMod && (url.protocol === "https:" || url.protocol === "http:")) {
+
+            const isCattyMod =
+              url.hostname === "cattymod.app" ||
+              url.hostname.endsWith(".cattymod.app");
+
+            if (
+              isCattyMod &&
+              (url.protocol === "https:" || url.protocol === "http:")
+            ) {
               destination = url.href;
             }
           } catch {
-            // Invalid URL, keep the fallback destination of "/"
+            // Invalid URL: keep the fallback destination.
           }
         }
+
         backButton.addEventListener("click", () => {
           window.location.href = destination;
         });
