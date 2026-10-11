@@ -538,6 +538,17 @@ class MenuBar extends React.Component {
     render () {
         const isEmbeddedEditor = window.parent !== window;
 
+        
+const navPos = (() => {
+    try {
+        const value = window.localStorage.getItem('cattymod:navPos');
+        return ['Left', 'Middle', 'Right'].includes(value) ? value : 'Left';
+    } catch (e) {
+        return 'Left';
+    }
+})();
+
+
         const saveNowMessage = (
             <FormattedMessage
                 defaultMessage="Save now"
@@ -586,13 +597,22 @@ class MenuBar extends React.Component {
 
         const aboutButton = this.buildAboutMenu(this.props.onClickAbout);
 
-        const menuBar = (
-            <Box
-                className={classNames(
-                    this.props.className,
-                    styles.menuBar
-                )}
-            >
+        
+const navPosClass = {
+    Left: styles.navPosLeft,
+    Middle: styles.navPosMiddle,
+    Right: styles.navPosRight
+}[navPos];
+
+const menuBar = (
+    <Box
+        className={classNames(
+            this.props.className,
+            styles.menuBar,
+            navPosClass
+        )}
+    >
+
                 <div className={styles.mainMenu}>
                     <div className={styles.fileGroup}>
                         {this.props.errors.length > 0 && (
