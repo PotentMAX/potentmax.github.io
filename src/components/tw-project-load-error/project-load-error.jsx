@@ -6,7 +6,7 @@ import Box from '../box/box.jsx';
 import {ProjectUnavailableLegalReasons, ProjectUnsharedError} from '../../lib/tw-load-project-error';
 
 import styles from './project-load-error.css';
-import reloadIcon from '../crash-message/reload.svg';
+import reloadIcon from './error.svg';
 
 const UNSHARED_DOCS = 'https://cattymod.app/docs/unshared-projects';
 
