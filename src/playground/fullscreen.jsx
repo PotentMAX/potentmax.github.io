@@ -1,3 +1,4 @@
+
 /**
  * Copyright (C) 2021 Thomas Weber
  *
@@ -32,7 +33,39 @@ const PlayerOnlyInterface = props => {
 
         initializeCustomDefaultProject();
 
-        return cleanupGoIcon;
+        // Restore the previous non-fullscreen URL when fullscreen exits.
+        const previousUrl =
+            sessionStorage.getItem('scratch-previous-mode-url') || '/';
+
+        const handleFullscreenChange = () => {
+            const store = window.ReduxStore;
+            if (!store) return;
+
+            const mode = store.getState().scratchGui.mode;
+            if (!mode || mode.isFullScreen) return;
+
+            const targetUrl = previousUrl === '/editor'
+                ? '/editor'
+                : '/';
+
+            if (window.location.pathname !== targetUrl) {
+                window.history.replaceState(
+                    window.history.state,
+                    '',
+                    targetUrl
+                );
+            }
+        };
+
+        const store = window.ReduxStore;
+        const unsubscribe = store
+            ? store.subscribe(handleFullscreenChange)
+            : null;
+
+        return () => {
+            cleanupGoIcon();
+            if (unsubscribe) unsubscribe();
+        };
     }, []);
 
     return <Interface {...props} />;
