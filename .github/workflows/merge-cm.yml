@@ -1,4 +1,4 @@
-name: Merge TurboWarp develop
+name: Merge CattyMod develop
 
 on:
   workflow_dispatch:
@@ -19,7 +19,7 @@ jobs:
 
       - name: Fetch TurboWarp develop
         run: |
-          git fetch https://github.com/TurboWarp/scratch-gui.git develop
+          git fetch https://github.com/CattyMod/scratch-gui.git develop
 
       - name: Configure Git
         run: |
