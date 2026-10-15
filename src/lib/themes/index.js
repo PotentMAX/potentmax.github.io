@@ -46,7 +46,7 @@ const ACCENT_MAP = {
     [ACCENT_VIOLET]: accentViolet
 };
 
-const ACCENT_DEFAULT = ACCENT_BLUE;
+const ACCENT_DEFAULT = ACCENT_INDIGO;
 
 const GUI_LIGHT = 'light';
 const GUI_DARK = 'dark';
