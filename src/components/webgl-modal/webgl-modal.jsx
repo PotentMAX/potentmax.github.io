@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactModal from 'react-modal';
@@ -30,7 +29,6 @@ const WebGlModal = ({intl, ...props}) => (
                 <h2>
                     <FormattedMessage {...messages.label} />
                 </h2>
-
                 <p>
                     { /* eslint-disable max-len */ }
                     <FormattedMessage
@@ -55,20 +53,6 @@ const WebGlModal = ({intl, ...props}) => (
                     { /* eslint-enable max-len */ }
                 </p>
 
-                {/* Continue Anyway button below the description */}
-                <Box className={styles.buttonRow}>
-                    <button
-                        className={styles.backButton}
-                        onClick={props.onBack}
-                    >
-                        <FormattedMessage
-                            defaultMessage="Continue Anyway"
-                            description="Label for button to continue despite unsupported WebGL"
-                            id="gui.webglModal.continueAnyway"
-                        />
-                    </button>
-                </Box>
-
                 <Box className={styles.buttonRow}>
                     <button
                         className={styles.backButton}
@@ -80,8 +64,8 @@ const WebGlModal = ({intl, ...props}) => (
                             id="gui.webglModal.back"
                         />
                     </button>
-                </Box>
 
+                </Box>
                 <div className={styles.faqLinkText}>
                     <FormattedMessage
                         defaultMessage="To learn more, go to the {previewFaqLink}."
