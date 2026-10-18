@@ -20,7 +20,7 @@ const manifest = {
       "type": "notice",
       "id": "small-screens",
       "text": "The text labels may be automatically replaced by icons on smaller windows."
-    }
+    },
     {
       "type": "notice",
       "id": "remove-menu-items",
