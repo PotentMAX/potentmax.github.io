@@ -666,35 +666,6 @@
                     <option value="rainbow">Rainbow</option>
                   </select>
                 </div>
-
-                <!-- Navigation Position -->
-                <div class="setting-row">
-                  <div class="setting-info">
-                    <div class="setting-title">Navigation Position</div>
-                    <div class="setting-description">Choose how navbar items should be aligned.</div>
-                  </div>
-                  <select id="nav-position-select" class="setting-select" aria-label="Navigation Position">
-                    <option value="Left">Left</option>
-                    <option value="Middle">Center</option>
-                    <option value="Right">Right</option>
-                  </select>
-                </div>
-
-                <!-- CattyMod Navbar Logo -->
-                <div class="setting-row">
-                  <div class="setting-info">
-                    <div class="setting-title">CattyMod Navbar Logo</div>
-                    <div class="setting-description">Show or hide the CattyMod logo in the navbar.</div>
-                  </div>
-                  <label class="switch">
-                    <input
-                      type="checkbox"
-                      id="logo-visible-toggle"
-                      aria-label="Show CattyMod navbar logo"
-                    >
-                    <span class="slider"></span>
-                  </label>
-                </div>
               </div>
             </div>
 
@@ -743,6 +714,66 @@
                       id="pip-enabled-toggle"
                       aria-label="Enable Picture in Picture"
                     >
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- NAVBAR -->
+            <div class="section">
+              <div class="section-title">Navbar</div>
+              <div class="card">
+                <!-- Navigation Position -->
+                <div class="setting-row">
+                  <div class="setting-info">
+                    <div class="setting-title">Navbar Align</div>
+                    <div class="setting-description">Choose how navbar items should be aligned.</div>
+                  </div>
+                  <select id="nav-position-select" class="setting-select" aria-label="Navbar Align">
+                    <option value="Left">Left</option>
+                    <option value="Middle">Center</option>
+                    <option value="Right">Right</option>
+                  </select>
+                </div>
+
+                <!-- CattyMod Navbar Logo -->
+                <div class="setting-row">
+                  <div class="setting-info">
+                    <div class="setting-title">CattyMod Navbar Logo</div>
+                    <div class="setting-description">Show or hide the CattyMod logo in the navbar.</div>
+                  </div>
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      id="logo-visible-toggle"
+                      aria-label="Show CattyMod navbar logo"
+                    >
+                    <span class="slider"></span>
+                  </label>
+                </div>
+
+                <!-- Addons visibility -->
+                <div class="setting-row">
+                  <div class="setting-info">
+                    <div class="setting-title">Addons Menu Option</div>
+                    <div class="setting-description">Show or hide Addons in the menu bar. You can always open Addons by clicking Settings, then Expand (to get here), then Addons.</div>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="addons-show-toggle" aria-label="Show Addons menu option">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+
+                <!-- Advanced visibility -->
+                <div class="setting-row">
+                  <div class="setting-info">
+                    <div class="setting-title">Advanced Menu Option</div>
+                    <div class="setting-description">Show or hide Advanced in the menu bar. You can always open it by clicking Edit, then Advanced Settings.</div>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="advanced-show-toggle" aria-label="Show Advanced menu option">
                     <span class="slider"></span>
                   </label>
                 </div>
@@ -861,6 +892,8 @@
       const GPT_ENABLED_KEY = "cattymod:gptEnabled";
       const LOGO_VISIBLE_KEY = "cattymod:logoVisible";
       const PIP_ENABLED_KEY = "cattymod:pipEnabled";
+      const ADDONS_SHOW_KEY = "cattymod:addonsShow";
+      const ADVANCED_SHOW_KEY = "cattymod:advancedShow";
 
       /* ------------------------- Theme ------------------------- */
       const darkModeSelect = document.getElementById("dark-mode-select");
@@ -1206,6 +1239,34 @@
         });
       }
 
+      /* ------------------------- Navbar Menu Options ------------------------- */
+      const addonsShowToggle = document.getElementById("addons-show-toggle");
+      const advancedShowToggle = document.getElementById("advanced-show-toggle");
+
+      function loadMenuOptionVisibility() {
+        if (addonsShowToggle) {
+          addonsShowToggle.checked = localStorage.getItem(ADDONS_SHOW_KEY) !== "false";
+        }
+        if (advancedShowToggle) {
+          advancedShowToggle.checked = localStorage.getItem(ADVANCED_SHOW_KEY) !== "false";
+        }
+        applySettingsAccent();
+      }
+
+      if (addonsShowToggle) {
+        addonsShowToggle.addEventListener("change", () => {
+          localStorage.setItem(ADDONS_SHOW_KEY, addonsShowToggle.checked ? "true" : "false");
+          loadMenuOptionVisibility();
+        });
+      }
+
+      if (advancedShowToggle) {
+        advancedShowToggle.addEventListener("change", () => {
+          localStorage.setItem(ADVANCED_SHOW_KEY, advancedShowToggle.checked ? "true" : "false");
+          loadMenuOptionVisibility();
+        });
+      }
+
       /* ------------------------- Picture in Picture ------------------------- */
       const pipEnabledToggle = document.getElementById("pip-enabled-toggle");
 
@@ -1442,6 +1503,14 @@
         if (event.key === PIP_ENABLED_KEY || event.key === null) {
           loadPipEnabled();
         }
+
+        if (
+          event.key === ADDONS_SHOW_KEY ||
+          event.key === ADVANCED_SHOW_KEY ||
+          event.key === null
+        ) {
+          loadMenuOptionVisibility();
+        }
       });
 
       /* ------------------------- Navigation Position ------------------------- */
@@ -1497,6 +1566,7 @@
       loadGptEnabled();
       loadLogoVisible();
       loadPipEnabled();
+      loadMenuOptionVisibility();
       loadNavPosition();
       loadPageFromHash();
     </script>
