@@ -14,9 +14,7 @@
 .body {
     color: white;
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+    display: block;
 }
 
 .body a {

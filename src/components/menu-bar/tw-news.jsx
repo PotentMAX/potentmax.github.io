@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {isScratchDesktop} from '../../lib/isScratchDesktop';
 import CloseButton from '../close-button/close-button.jsx';
@@ -13,14 +14,6 @@ const NEWS_ITEMS = {
                 You are currently on CattyMod Beta.
             </>
         )
-    },
-    release: {
-        id: 'go-icon-intro',
-        body: (
-            <>
-                New Go Icons are here! Explore the latest additions to CattyMod.
-            </>
-        )
     }
 };
 
@@ -29,7 +22,7 @@ const getCurrentNews = () => {
         return NEWS_ITEMS.beta;
     }
 
-    return NEWS_ITEMS.release;
+    return null;
 };
 
 const getIsClosedInLocalStorage = (newsId) => {
@@ -44,7 +37,7 @@ const markAsClosedInLocalStorage = (newsId) => {
     try {
         localStorage.setItem(LOCAL_STORAGE_KEY, newsId);
     } catch (e) {
-        // ignore
+        // Ignore storage errors.
     }
 };
 
@@ -55,7 +48,7 @@ class TWNews extends React.Component {
         const news = getCurrentNews();
 
         this.state = {
-            closed: getIsClosedInLocalStorage(news.id)
+            closed: news ? getIsClosedInLocalStorage(news.id) : false
         };
 
         this.handleClose = this.handleClose.bind(this);
@@ -63,6 +56,8 @@ class TWNews extends React.Component {
 
     handleClose() {
         const news = getCurrentNews();
+
+        if (!news) return;
 
         markAsClosedInLocalStorage(news.id);
 
@@ -74,26 +69,49 @@ class TWNews extends React.Component {
     }
 
     render() {
-        // Only show news on the beta site
-        if (
-            this.state.closed ||
-            isScratchDesktop() ||
-            window.location.hostname !== 'beta.cattymod.app'
-        ) {
+        const {hostname, protocol} = window.location;
+
+        // Never show banners in Scratch Desktop or local files.
+        if (isScratchDesktop() || protocol === 'file:') {
             return null;
         }
 
-        const news = getCurrentNews();
+        // The official studio must not display any banner.
+        if (hostname === 'studio.cattymod.app') {
+            return null;
+        }
 
+        // Only show the beta banner on the beta site.
+        if (hostname === 'beta.cattymod.app') {
+            const news = getCurrentNews();
+
+            if (!news || this.state.closed) {
+                return null;
+            }
+
+            return (
+                <div className={styles.news}>
+                    <CloseButton
+                        className={styles.closeButton}
+                        onClick={this.handleClose}
+                    />
+
+                    <div className={styles.body}>
+                        {news.body}
+                    </div>
+                </div>
+            );
+        }
+
+        // Other hosted pages are not official CattyMod pages.
         return (
             <div className={styles.news}>
-                <CloseButton
-                    className={styles.closeButton}
-                    onClick={this.handleClose}
-                />
-
                 <div className={styles.body}>
-                    {news.body}
+                    This page is not officially by CattyMod.{' '}
+                    <a href="https://cattymod.app/">
+                        <strong>Go to cattymod.app</strong>
+                    </a>
+                    {' '}to get a private and powerful Scratch mod.
                 </div>
             </div>
         );

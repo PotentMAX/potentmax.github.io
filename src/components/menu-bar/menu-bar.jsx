@@ -265,6 +265,24 @@ constructor (props) {
         }
     }
 
+    // Hide Addons only when explicitly disabled in CattyMod settings.
+    isAddonButtonVisible () {
+        try {
+            return window.localStorage.getItem('cattymod:addonsShow') !== 'false';
+        } catch (e) {
+            return true;
+        }
+    }
+
+    // Hide Advanced only when explicitly disabled in CattyMod settings.
+    isAdvancedButtonVisible () {
+        try {
+            return window.localStorage.getItem('cattymod:advancedShow') !== 'false';
+        } catch (e) {
+            return true;
+        }
+    }
+
     
     // Show Picture in Picture by default unless explicitly disabled.
     // Never show it inside an embedded editor.
@@ -1582,7 +1600,7 @@ const menuBar = (
                             </MenuLabel>
                         )}
 
-                        {this.props.onClickAddonSettings && (
+                        {this.props.onClickAddonSettings && this.isAddonButtonVisible() && (
                             <div
                                 className={classNames(
                                     styles.menuBarItem,
@@ -1606,7 +1624,7 @@ const menuBar = (
                             </div>
                         )}
 
-                        {this.props.onClickSettingsModal && (
+                        {this.props.onClickSettingsModal && this.isAdvancedButtonVisible() && (
                             <div
                                 className={classNames(
                                     styles.menuBarItem,
