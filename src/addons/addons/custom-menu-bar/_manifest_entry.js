@@ -19,12 +19,7 @@ const manifest = {
     {
       "type": "notice",
       "id": "small-screens",
-      "text": "The text labels may be automatically replaced by icons on smaller windows."
-    },
-    {
-      "type": "notice",
-      "id": "remove-menu-items",
-      "text": "You can remove Addons and Advanced via Settings (https://studio.cattymod.app/settings). You can also remove Feedback by using Remove Feedback (https://studio.cattymod.app/addons.html#tw-remove-feedback)."
+      "text": "The text labels may be automatically replaced by icons on smaller windows. You can remove Addons and Advanced via Settings (https://studio.cattymod.app/settings). You can also remove Feedback by using Remove Feedback (https://studio.cattymod.app/addons.html#tw-remove-feedback)."
     }
   ],
   "tags": [],
