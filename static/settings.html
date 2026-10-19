@@ -288,7 +288,7 @@
         gap: 20px;
       }
 
-      .setting-row + .setting-row {
+      .setting-row+.setting-row {
         border-top: 1px solid var(--border);
       }
 
@@ -363,21 +363,21 @@
         transition: 0.2s ease;
       }
 
-      .switch input:checked + .slider {
+      .switch input:checked+.slider {
         background: var(--accent);
       }
 
-      .switch input:checked + .slider.rainbow-accent {
+      .switch input:checked+.slider.rainbow-accent {
         background: var(--accent-gradient) !important;
         background-size: 200% 100%;
         animation: rainbow-shift 4s linear infinite;
       }
 
-      .switch input:checked + .slider::before {
+      .switch input:checked+.slider::before {
         transform: translateX(20px);
       }
 
-      .switch input:focus-visible + .slider {
+      .switch input:focus-visible+.slider {
         outline: 2px solid var(--accent);
         outline-offset: 3px;
       }
@@ -552,10 +552,311 @@
         .setting-select {
           min-width: 135px;
         }
+
+        /* Danger Zone */
+        .danger-zone {
+          margin-top: 32px;
+          margin-bottom: 24px;
+        }
+      }
+
+        .danger-zone .section-title {
+          color: #e53935;
+        }
+
+        .danger-zone-card {
+          border-color: color-mix(in srgb, #e53935 40%, var(--border));
+        }
+
+        .danger-zone-header {
+          width: 100%;
+          min-height: 66px;
+          padding: 16px 18px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          border: 0;
+          background: transparent;
+          color: var(--text);
+          text-align: left;
+          cursor: pointer;
+          font: inherit;
+        }
+
+        .danger-zone-header:hover {
+          background: var(--hover);
+        }
+
+        .danger-zone-heading {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-size: 15px;
+          font-weight: 600;
+        }
+
+        .danger-zone-heading i {
+          width: 19px;
+          height: 19px;
+          color: #e53935;
+          flex-shrink: 0;
+        }
+
+        .danger-zone-chevron {
+          width: 18px;
+          height: 18px;
+          flex-shrink: 0;
+          transition: transform 0.2s ease;
+        }
+
+        .danger-zone-header[aria-expanded="true"] .danger-zone-chevron {
+          transform: rotate(180deg);
+        }
+
+        .danger-zone-content {
+          padding: 0 18px 18px;
+        }
+
+        .danger-zone-content[hidden] {
+          display: none;
+        }
+
+        .danger-zone-description {
+          margin: 0 0 16px;
+          color: var(--muted);
+          font-size: 13px;
+          line-height: 1.5;
+        }
+
+        .danger-zone-button {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          padding: 10px 13px;
+          border: 1px solid #e53935;
+          border-radius: 9px;
+          background: #e53935;
+          color: #fff;
+          font: inherit;
+          font-size: 14px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: background 0.15s ease;
+        }
+
+        .danger-zone-button:hover {
+          background: #c62828;
+        }
+
+        .danger-zone-button:focus-visible,
+        .danger-zone-header:focus-visible {
+          outline: 2px solid var(--accent);
+          outline-offset: -2px;
+        }
+
+        .danger-zone-button i {
+          width: 17px;
+          height: 17px;
+        }
+
+        @media (max-width: 700px) {
+          .danger-zone-header {
+            padding: 15px;
+          }
+
+          .danger-zone-content {
+            padding: 0 15px 15px;
+          }
+        }
+
+        /* Clear All Data Modal */
+        .danger-modal-overlay {
+          position: fixed;
+          inset: 0;
+          z-index: 9999;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+          background: rgba(0, 0, 0, 0.55);
+          backdrop-filter: blur(4px);
+          -webkit-backdrop-filter: blur(4px);
+          opacity: 1;
+          visibility: visible;
+          transition: opacity 0.18s ease, visibility 0.18s ease;
+        }
+
+        .danger-modal-overlay[hidden] {
+          display: none;
+        }
+
+        .danger-modal {
+          width: 100%;
+          max-width: 420px;
+          padding: 24px;
+          background: var(--card);
+          color: var(--text);
+          border: 1px solid var(--border);
+          border-radius: 18px;
+          box-shadow: 0 18px 60px rgba(0, 0, 0, 0.3);
+          transform: translateY(0) scale(1);
+          animation: danger-modal-enter 0.18s ease;
+        }
+
+        @keyframes danger-modal-enter {
+          from {
+            opacity: 0;
+            transform: translateY(8px) scale(0.98);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+
+        .danger-modal-icon {
+          width: 48px;
+          height: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 18px;
+          color: #e53935;
+          background: color-mix(in srgb, #e53935 12%, transparent);
+          border-radius: 14px;
+        }
+
+        .danger-modal-icon i {
+          width: 25px;
+          height: 25px;
+        }
+
+        .danger-modal-title {
+          margin: 0;
+          font-size: 21px;
+          font-weight: 700;
+          letter-spacing: -0.3px;
+        }
+
+        .danger-modal-description {
+          margin: 10px 0 0;
+          color: var(--muted);
+          font-size: 14px;
+          line-height: 1.6;
+        }
+
+        .danger-modal-warning {
+          display: flex;
+          align-items: flex-start;
+          gap: 10px;
+          margin-top: 18px;
+          padding: 12px;
+          color: var(--text);
+          background: color-mix(in srgb, #e53935 8%, var(--card));
+          border: 1px solid color-mix(in srgb, #e53935 28%, var(--border));
+          border-radius: 10px;
+          font-size: 13px;
+          line-height: 1.5;
+        }
+
+        .danger-modal-warning i {
+          width: 18px;
+          height: 18px;
+          flex-shrink: 0;
+          color: #e53935;
+          margin-top: 1px;
+        }
+
+        .danger-modal-actions {
+          display: flex;
+          justify-content: flex-end;
+          flex-wrap: wrap;
+          gap: 10px;
+          margin-top: 24px;
+        }
+
+        .danger-modal-cancel,
+        .danger-modal-confirm {
+          min-height: 40px;
+          padding: 10px 14px;
+          border-radius: 9px;
+          font: inherit;
+          font-size: 13px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: background 0.15s ease, transform 0.15s ease;
+        }
+
+        .danger-modal-cancel {
+          color: var(--text);
+          background: var(--input);
+          border: 1px solid var(--border);
+        }
+
+        .danger-modal-cancel:hover {
+          background: var(--hover);
+        }
+
+        .danger-modal-confirm {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 7px;
+          color: white;
+          background: #e53935;
+          border: 1px solid #e53935;
+        }
+
+        .danger-modal-confirm:hover {
+          background: #c62828;
+        }
+
+        .danger-modal-confirm i {
+          width: 16px;
+          height: 16px;
+        }
+
+        .danger-modal-cancel:focus-visible,
+        .danger-modal-confirm:focus-visible {
+          outline: 2px solid var(--accent);
+          outline-offset: 3px;
+        }
+
+        body.modal-open {
+          overflow: hidden;
+        }
+
+        @media (max-width: 480px) {
+          .danger-modal {
+            padding: 20px;
+            border-radius: 15px;
+          }
+
+          .danger-modal-actions {
+            flex-direction: column-reverse;
+          }
+
+          .danger-modal-cancel,
+          .danger-modal-confirm {
+            width: 100%;
+            justify-content: center;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+          .danger-modal,
+          .danger-modal-overlay {
+            animation: none;
+            transition: none;
+          }
+        }
       }
     </style>
   </head>
-
   <body>
     <div class="app">
       <aside class="sidebar">
@@ -566,7 +867,6 @@
             <div class="brand-subtitle">Settings</div>
           </div>
         </div>
-
         <nav class="nav">
           <button class="nav-button active" data-page="general">
             <i data-lucide="settings"></i>
@@ -586,7 +886,6 @@
             <span class="nav-text">About</span>
           </button>
         </nav>
-
         <div class="sidebar-bottom">
           <button class="nav-button back-button" id="back-to-cattymod">
             <i data-lucide="door-open"></i>
@@ -595,7 +894,6 @@
           <div class="sidebar-footer-text">CattyMod Settings</div>
         </div>
       </aside>
-
       <main class="main">
         <div class="content">
           <!-- GENERAL -->
@@ -604,7 +902,6 @@
               <h1>General</h1>
               <p>Change how CattyMod looks and behaves.</p>
             </div>
-
             <div class="section">
               <div class="section-title">Appearance</div>
               <div class="card">
@@ -620,7 +917,6 @@
                     <option value="midnight">Midnight</option>
                   </select>
                 </div>
-
                 <!-- Block Style -->
                 <div class="setting-row">
                   <div class="setting-info">
@@ -633,7 +929,6 @@
                     <option value="dark">Dark (Beta)</option>
                   </select>
                 </div>
-
                 <!-- Go Icon -->
                 <div class="setting-row">
                   <div class="setting-info">
@@ -647,7 +942,6 @@
                     <option value="purpleflag">Purple Flag</option>
                   </select>
                 </div>
-
                 <!-- Accent -->
                 <div class="setting-row">
                   <div class="setting-info">
@@ -668,7 +962,6 @@
                 </div>
               </div>
             </div>
-
             <!-- PROJECTS -->
             <div class="section">
               <div class="section-title">Projects</div>
@@ -684,24 +977,15 @@
                     <span class="slider"></span>
                   </label>
                 </div>
-
                 <div id="custom-project-options" class="setting-options collapsed">
                   <label class="input-label" for="custom-project-id">Scratch Project ID</label>
-                  <input
-                    id="custom-project-id"
-                    class="text-input"
-                    type="text"
-                    placeholder="e.g. 1368094633"
-                    inputmode="numeric"
-                    autocomplete="off"
-                  >
+                  <input id="custom-project-id" class="text-input" type="text" placeholder="e.g. 1368094633" inputmode="numeric" autocomplete="off">
                   <div class="preset-buttons">
                     <button type="button" class="preset-btn" data-id="510186917">ScratchCat</button>
                     <button type="button" class="preset-btn" data-id="1051157469">Dango Cat</button>
                     <button type="button" class="preset-btn" data-id="432688418">Blank</button>
                   </div>
                 </div>
-
                 <!-- Picture in Picture -->
                 <div class="setting-row">
                   <div class="setting-info">
@@ -709,18 +993,12 @@
                     <div class="setting-description">Enable or disable Picture in Picture for projects.</div>
                   </div>
                   <label class="switch">
-                    <input
-                      type="checkbox"
-                      id="pip-enabled-toggle"
-                      aria-label="Enable Picture in Picture"
-                    >
+                    <input type="checkbox" id="pip-enabled-toggle" aria-label="Enable Picture in Picture">
                     <span class="slider"></span>
                   </label>
                 </div>
               </div>
             </div>
-
-
             <!-- NAVBAR -->
             <div class="section">
               <div class="section-title">Navbar</div>
@@ -737,7 +1015,6 @@
                     <option value="Right">Right</option>
                   </select>
                 </div>
-
                 <!-- CattyMod Navbar Logo -->
                 <div class="setting-row">
                   <div class="setting-info">
@@ -745,15 +1022,10 @@
                     <div class="setting-description">Show or hide the CattyMod logo in the navbar.</div>
                   </div>
                   <label class="switch">
-                    <input
-                      type="checkbox"
-                      id="logo-visible-toggle"
-                      aria-label="Show CattyMod navbar logo"
-                    >
+                    <input type="checkbox" id="logo-visible-toggle" aria-label="Show CattyMod navbar logo">
                     <span class="slider"></span>
                   </label>
                 </div>
-
                 <!-- Addons visibility -->
                 <div class="setting-row">
                   <div class="setting-info">
@@ -765,7 +1037,6 @@
                     <span class="slider"></span>
                   </label>
                 </div>
-
                 <!-- Advanced visibility -->
                 <div class="setting-row">
                   <div class="setting-info">
@@ -779,7 +1050,6 @@
                 </div>
               </div>
             </div>
-
             <!-- MOBILE -->
             <div class="section">
               <div class="section-title">Mobile</div>
@@ -796,7 +1066,6 @@
                 </div>
               </div>
             </div>
-
             <!-- AI -->
             <div class="section">
               <div class="section-title">AI</div>
@@ -814,14 +1083,31 @@
               </div>
             </div>
           </section>
-
+          <!-- DANGER ZONE -->
+          <div class="section danger-zone">
+            <div class="section-title">Danger Zone</div>
+            <div class="card danger-zone-card">
+              <button type="button" class="danger-zone-header" id="danger-zone-toggle" aria-expanded="false" aria-controls="danger-zone-content">
+                <span class="danger-zone-heading">
+                  <i data-lucide="shield-alert"></i> Danger Zone </span>
+                <i class="danger-zone-chevron" data-lucide="chevron-down"></i>
+              </button>
+              <div id="danger-zone-content" class="danger-zone-content" hidden>
+                  <hr>
+                <div class="setting-title">Clear all data</div>
+                <p class="danger-zone-description"> Permanently clear all localStorage data saved by this website, including CattyMod settings and preferences. This action cannot be undone. </p>
+                <button type="button" class="danger-zone-button" id="clear-all-data-button">
+                  <i data-lucide="trash-2"></i> Clear all data </button>
+              </div>
+            </div>
+          </div>
+          </section>
           <!-- LABS -->
           <section id="page-labs" class="page" style="display: none;">
             <div class="page-header">
               <h1>Labs</h1>
               <p>Try upcoming CattyMod features and help shape the experience.</p>
             </div>
-
             <div class="section">
               <div class="section-title">CattyMod Beta</div>
               <div class="card about-card">
@@ -831,18 +1117,16 @@
                   <i data-lucide="flask-conical"></i>
                   <span id="beta-button-text">Try CattyMod Beta</span>
                 </button>
-                <div class="setting-description card-desc" style="font-size: 13px; margin-top: 14px;">You can click <strong>CattyMod Feedback</strong> in the navbar to provide feedback to the experience anytime!</div>
+                <div class="setting-description card-desc" style="font-size: 13px; margin-top: 14px;">You can click <strong>CattyMod Feedback</strong> in the navbar to provide feedback to the experience anytime! </div>
               </div>
             </div>
           </section>
-
           <!-- ABOUT -->
           <section id="page-about" class="page" style="display: none;">
             <div class="page-header">
               <h1>About</h1>
               <p>Information about CattyMod's internals.</p>
             </div>
-
             <div class="card about-card">
               <div class="about-header">
                 <img class="about-logo" src="https://cattymod.app/assets/cattymod.svg" alt="CattyMod">
@@ -853,9 +1137,7 @@
               </div>
               <p class="about-description">Block-based coding with tons of capabilities.</p>
             </div>
-
             <div style="height: 16px;"></div>
-
             <div class="card about-card">
               <div class="about-header">
                 <img class="about-logo" src="https://cattymod.app/assets/turbowarp.svg" alt="TurboWarp">
@@ -866,9 +1148,7 @@
               </div>
               <p class="about-description">Block-based programming language.</p>
             </div>
-
             <div style="height: 16px;"></div>
-
             <div class="card about-card">
               <div class="about-header">
                 <img class="about-logo" src="https://cattymod.app/assets/scratch.svg" alt="Scratch">
@@ -883,7 +1163,25 @@
         </div>
       </main>
     </div>
-
+    <!-- Clear All Data Confirmation Modal -->
+    <div class="danger-modal-overlay" id="danger-modal-overlay" hidden>
+      <section class="danger-modal" role="dialog" aria-modal="true" aria-labelledby="danger-modal-title" aria-describedby="danger-modal-description">
+        <div class="danger-modal-icon">
+          <i data-lucide="shield-alert"></i>
+        </div>
+        <h2 class="danger-modal-title" id="danger-modal-title"> Clear all data? </h2>
+        <p class="danger-modal-description" id="danger-modal-description"> Are you sure you want to clear all CattyMod data stored on this website? </p>
+        <div class="danger-modal-warning">
+          <i data-lucide="alert-triangle"></i>
+          <span> This will permanently delete all localStorage entries for this website, including saved settings and preferences. This action cannot be undone. </span>
+        </div>
+        <div class="danger-modal-actions">
+          <button type="button" class="danger-modal-cancel" id="danger-modal-cancel"> Cancel </button>
+          <button type="button" class="danger-modal-confirm" id="danger-modal-confirm">
+            <i data-lucide="trash-2"></i> Clear all data </button>
+        </div>
+      </section>
+    </div>
     <script>
       const THEME_KEY = "tw:theme";
       const CUSTOM_PROJECT_KEY = "cattymod:customDefaultProject";
@@ -894,58 +1192,48 @@
       const PIP_ENABLED_KEY = "cattymod:pipEnabled";
       const ADDONS_SHOW_KEY = "cattymod:addonsShow";
       const ADVANCED_SHOW_KEY = "cattymod:advancedShow";
-
       /* ------------------------- Theme ------------------------- */
       const darkModeSelect = document.getElementById("dark-mode-select");
 
       function readTheme() {
         const raw = localStorage.getItem(THEME_KEY);
         if (!raw) return null;
-
         try {
           const parsed = JSON.parse(raw);
-
           if (parsed && typeof parsed === "object") {
             return parsed;
           }
-
           if (typeof parsed === "string") {
-            return { gui: parsed };
+            return {
+              gui: parsed
+            };
           }
         } catch {
           if (raw === "dark" || raw === "light" || raw === "midnight") {
-            return { gui: raw };
+            return {
+              gui: raw
+            };
           }
         }
-
         return null;
       }
 
       function systemIsDark() {
-        return window.matchMedia &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches;
+        return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
       }
 
       function getCurrentGuiTheme() {
         const theme = readTheme();
-
-        if (theme && (
-          theme.gui === "dark" ||
-          theme.gui === "light" ||
-          theme.gui === "midnight"
-        )) {
+        if (theme && (theme.gui === "dark" || theme.gui === "light" || theme.gui === "midnight")) {
           return theme.gui;
         }
-
         return systemIsDark() ? "dark" : "light";
       }
 
       function applyTheme() {
         const theme = getCurrentGuiTheme();
-
         document.body.classList.toggle("dark", theme === "dark");
         document.body.classList.toggle("midnight", theme === "midnight");
-
         if (darkModeSelect) {
           darkModeSelect.value = theme;
         }
@@ -953,12 +1241,11 @@
 
       function updateTheme(updater) {
         const current = readTheme() || {};
-        const newTheme = { ...current };
-
+        const newTheme = {
+          ...current
+        };
         updater(newTheme);
-
         localStorage.setItem(THEME_KEY, JSON.stringify(newTheme));
-
         applyTheme();
         applySettingsAccent();
         loadBlockStyle();
@@ -969,15 +1256,12 @@
         if (!["light", "dark", "midnight"].includes(gui)) {
           gui = "light";
         }
-
         updateTheme(theme => {
           theme.gui = gui;
         });
       }
-
       /* ------------------------- Accent ------------------------- */
       const accentSelect = document.getElementById("accent-select");
-
       const ACCENT_COLORS = {
         red: "#e53935",
         orange: "#fb8c00",
@@ -988,56 +1272,38 @@
         violet: "#8e44ad",
         purple: "#9c27b0"
       };
-
-      const RAINBOW_GRADIENT =
-        "linear-gradient(90deg, #e53935, #fb8c00, #fbc02d, #43a047, #009ccc, #3949ab, #8e44ad)";
-
-      const ACCENT_OPTIONS = [
-        "red", "orange", "yellow", "green", "blue",
-        "indigo", "violet", "purple", "rainbow"
-      ];
+      const RAINBOW_GRADIENT = "linear-gradient(90deg, #e53935, #fb8c00, #fbc02d, #43a047, #009ccc, #3949ab, #8e44ad)";
+      const ACCENT_OPTIONS = ["red", "orange", "yellow", "green", "blue", "indigo", "violet", "purple", "rainbow"];
 
       function getCurrentAccent() {
         const theme = readTheme();
-
-        if (
-          theme &&
-          typeof theme.accent === "string" &&
-          ACCENT_OPTIONS.includes(theme.accent.toLowerCase())
-        ) {
+        if (theme && typeof theme.accent === "string" && ACCENT_OPTIONS.includes(theme.accent.toLowerCase())) {
           return theme.accent.toLowerCase();
         }
-
         return "blue";
       }
 
       function applySettingsAccent() {
         const accent = getCurrentAccent();
         const root = document.documentElement;
-
         document.querySelectorAll(".rainbow-accent").forEach(element => {
           element.classList.remove("rainbow-accent");
         });
-
         document.querySelectorAll(".rainbow-text").forEach(element => {
           element.classList.remove("rainbow-text");
         });
-
         if (accent === "rainbow") {
           root.style.setProperty("--accent", "#009ccc");
           root.style.setProperty("--accent-hover", "#008db8");
           root.style.setProperty("--accent-gradient", RAINBOW_GRADIENT);
-
           document.querySelectorAll(".nav-button.active").forEach(element => {
             element.classList.add("rainbow-accent");
           });
-
           document.querySelectorAll(".switch input:checked + .slider").forEach(element => {
             element.classList.add("rainbow-accent");
           });
         } else {
           const color = ACCENT_COLORS[accent] || ACCENT_COLORS.blue;
-
           root.style.setProperty("--accent", color);
           root.style.setProperty("--accent-hover", color);
           root.style.setProperty("--accent-gradient", color);
@@ -1046,7 +1312,6 @@
 
       function setAccent(accent) {
         if (!ACCENT_OPTIONS.includes(accent)) return;
-
         updateTheme(theme => {
           theme.accent = accent;
         });
@@ -1054,46 +1319,37 @@
 
       function loadAccent() {
         if (!accentSelect) return;
-
         accentSelect.value = getCurrentAccent();
         applySettingsAccent();
       }
-
       if (accentSelect) {
         accentSelect.addEventListener("change", () => {
           setAccent(accentSelect.value);
         });
       }
-
       /* ------------------------- Dark Mode ------------------------- */
       if (darkModeSelect) {
         darkModeSelect.addEventListener("change", () => {
           setGuiTheme(darkModeSelect.value);
         });
       }
-
       const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-
       mediaQuery.addEventListener("change", () => {
         if (!localStorage.getItem(THEME_KEY)) {
           applyTheme();
           applySettingsAccent();
         }
       });
-
       /* ------------------------- Block Style ------------------------- */
       const blockStyleSelect = document.getElementById("block-style-select");
 
       function getBlockStyle() {
         const theme = readTheme();
-
         if (!theme || typeof theme.blocks !== "string") {
           return "original";
         }
-
         if (theme.blocks === "high-contrast") return "high-contrast";
         if (theme.blocks === "dark") return "dark";
-
         return "original";
       }
 
@@ -1103,39 +1359,32 @@
             delete theme.blocks;
             return;
           }
-
           theme.blocks = style;
         });
       }
 
       function loadBlockStyle() {
         if (!blockStyleSelect) return;
-
         blockStyleSelect.value = getBlockStyle();
       }
-
       if (blockStyleSelect) {
         blockStyleSelect.addEventListener("change", () => {
           setBlockStyle(blockStyleSelect.value);
         });
       }
-
       /* ------------------------- Go Icon ------------------------- */
       const goIconSelect = document.getElementById("go-icon-select");
 
       function getCurrentGoIcon() {
         const saved = localStorage.getItem(GO_ICON_KEY);
-
         if (["play", "greenflag", "blueflag", "purpleflag"].includes(saved)) {
           return saved;
         }
-
         return "play";
       }
 
       function loadGoIcon() {
         if (!goIconSelect) return;
-
         goIconSelect.value = getCurrentGoIcon();
       }
 
@@ -1143,20 +1392,16 @@
         if (!["play", "greenflag", "blueflag", "purpleflag"].includes(icon)) {
           icon = "play";
         }
-
         localStorage.setItem(GO_ICON_KEY, icon);
         loadGoIcon();
       }
-
       if (goIconSelect) {
         goIconSelect.addEventListener("change", () => {
           setGoIcon(goIconSelect.value);
         });
       }
-
       /* ------------------------- Mobile Touch Controls ------------------------- */
-      const mobileTouchControlsToggle =
-        document.getElementById("mobile-touch-controls-toggle");
+      const mobileTouchControlsToggle = document.getElementById("mobile-touch-controls-toggle");
 
       function getMobileTouchControlsEnabled() {
         return localStorage.getItem(MOBILE_TOUCH_CONTROLS_KEY) !== "false";
@@ -1164,26 +1409,19 @@
 
       function loadMobileTouchControls() {
         if (!mobileTouchControlsToggle) return;
-
         mobileTouchControlsToggle.checked = getMobileTouchControlsEnabled();
         applySettingsAccent();
       }
 
       function setMobileTouchControlsEnabled(enabled) {
-        localStorage.setItem(
-          MOBILE_TOUCH_CONTROLS_KEY,
-          enabled ? "true" : "false"
-        );
-
+        localStorage.setItem(MOBILE_TOUCH_CONTROLS_KEY, enabled ? "true" : "false");
         loadMobileTouchControls();
       }
-
       if (mobileTouchControlsToggle) {
         mobileTouchControlsToggle.addEventListener("change", () => {
           setMobileTouchControlsEnabled(mobileTouchControlsToggle.checked);
         });
       }
-
       /* ------------------------- AI / Copilot ------------------------- */
       const gptEnabledToggle = document.getElementById("gpt-enabled-toggle");
 
@@ -1193,7 +1431,6 @@
 
       function loadGptEnabled() {
         if (!gptEnabledToggle) return;
-
         gptEnabledToggle.checked = getGptEnabled();
         applySettingsAccent();
       }
@@ -1202,13 +1439,11 @@
         localStorage.setItem(GPT_ENABLED_KEY, enabled ? "true" : "false");
         loadGptEnabled();
       }
-
       if (gptEnabledToggle) {
         gptEnabledToggle.addEventListener("change", () => {
           setGptEnabled(gptEnabledToggle.checked);
         });
       }
-
       /* ------------------------- Navbar Logo Visibility ------------------------- */
       const logoVisibleToggle = document.getElementById("logo-visible-toggle");
 
@@ -1219,26 +1454,19 @@
 
       function loadLogoVisible() {
         if (!logoVisibleToggle) return;
-
         logoVisibleToggle.checked = getLogoVisible();
         applySettingsAccent();
       }
 
       function setLogoVisible(visible) {
-        localStorage.setItem(
-          LOGO_VISIBLE_KEY,
-          visible ? "true" : "false"
-        );
-
+        localStorage.setItem(LOGO_VISIBLE_KEY, visible ? "true" : "false");
         loadLogoVisible();
       }
-
       if (logoVisibleToggle) {
         logoVisibleToggle.addEventListener("change", () => {
           setLogoVisible(logoVisibleToggle.checked);
         });
       }
-
       /* ------------------------- Navbar Menu Options ------------------------- */
       const addonsShowToggle = document.getElementById("addons-show-toggle");
       const advancedShowToggle = document.getElementById("advanced-show-toggle");
@@ -1252,21 +1480,18 @@
         }
         applySettingsAccent();
       }
-
       if (addonsShowToggle) {
         addonsShowToggle.addEventListener("change", () => {
           localStorage.setItem(ADDONS_SHOW_KEY, addonsShowToggle.checked ? "true" : "false");
           loadMenuOptionVisibility();
         });
       }
-
       if (advancedShowToggle) {
         advancedShowToggle.addEventListener("change", () => {
           localStorage.setItem(ADVANCED_SHOW_KEY, advancedShowToggle.checked ? "true" : "false");
           loadMenuOptionVisibility();
         });
       }
-
       /* ------------------------- Picture in Picture ------------------------- */
       const pipEnabledToggle = document.getElementById("pip-enabled-toggle");
 
@@ -1277,26 +1502,19 @@
 
       function loadPipEnabled() {
         if (!pipEnabledToggle) return;
-
         pipEnabledToggle.checked = getPipEnabled();
         applySettingsAccent();
       }
 
       function setPipEnabled(enabled) {
-        localStorage.setItem(
-          PIP_ENABLED_KEY,
-          enabled ? "true" : "false"
-        );
-
+        localStorage.setItem(PIP_ENABLED_KEY, enabled ? "true" : "false");
         loadPipEnabled();
       }
-
       if (pipEnabledToggle) {
         pipEnabledToggle.addEventListener("change", () => {
           setPipEnabled(pipEnabledToggle.checked);
         });
       }
-
       /* ------------------------- Custom Default Project ------------------------- */
       const customProjectToggle = document.getElementById("custom-project-toggle");
       const customProjectOptions = document.getElementById("custom-project-options");
@@ -1304,18 +1522,12 @@
 
       function updateCustomProjectVisibility() {
         if (!customProjectOptions || !customProjectToggle) return;
-
-        customProjectOptions.classList.toggle(
-          "collapsed",
-          !customProjectToggle.checked
-        );
+        customProjectOptions.classList.toggle("collapsed", !customProjectToggle.checked);
       }
 
       function loadCustomProject() {
         if (!customProjectToggle || !customProjectId) return;
-
         const saved = localStorage.getItem(CUSTOM_PROJECT_KEY);
-
         if (saved) {
           customProjectToggle.checked = true;
           customProjectId.value = saved;
@@ -1323,34 +1535,25 @@
           customProjectToggle.checked = false;
           customProjectId.value = "";
         }
-
         updateCustomProjectVisibility();
       }
-
       if (customProjectToggle) {
         customProjectToggle.addEventListener("change", () => {
           if (customProjectToggle.checked) {
             if (customProjectId.value.trim()) {
-              localStorage.setItem(
-                CUSTOM_PROJECT_KEY,
-                customProjectId.value
-              );
+              localStorage.setItem(CUSTOM_PROJECT_KEY, customProjectId.value);
             }
           } else {
             localStorage.removeItem(CUSTOM_PROJECT_KEY);
           }
-
           updateCustomProjectVisibility();
           applySettingsAccent();
         });
       }
-
       if (customProjectId) {
         customProjectId.addEventListener("input", () => {
           const numbersOnly = customProjectId.value.replace(/\D/g, "");
-
           customProjectId.value = numbersOnly;
-
           if (customProjectToggle.checked) {
             if (numbersOnly) {
               localStorage.setItem(CUSTOM_PROJECT_KEY, numbersOnly);
@@ -1360,48 +1563,36 @@
           }
         });
       }
-
       document.querySelectorAll(".preset-btn").forEach(btn => {
         btn.addEventListener("click", () => {
           const id = btn.dataset.id;
-
           if (customProjectId) {
             customProjectId.value = id;
           }
-
           if (customProjectToggle) {
             customProjectToggle.checked = true;
           }
-
           localStorage.setItem(CUSTOM_PROJECT_KEY, id);
-
           updateCustomProjectVisibility();
           applySettingsAccent();
         });
       });
-
       /* ------------------------- Labs / Beta ------------------------- */
       const betaButton = document.getElementById("beta-button");
       const betaButtonText = document.getElementById("beta-button-text");
       const isBeta = window.location.hostname === "beta.cattymod.app";
-
       if (isBeta) {
         const cardTitle = document.querySelector("#page-labs .card-title");
         const cardDescriptions = document.querySelectorAll("#page-labs .card-desc");
-
         if (cardTitle) {
           cardTitle.textContent = "You're on beta.cattymod.app";
         }
-
         if (cardDescriptions[0]) {
-          cardDescriptions[0].textContent =
-            "Is CattyMod not working for you? Try going back to Studio.";
+          cardDescriptions[0].textContent = "Is CattyMod not working for you? Try going back to Studio.";
         }
-
         if (betaButtonText) {
           betaButtonText.textContent = "Exit Beta";
         }
-
         if (betaButton) {
           betaButton.addEventListener("click", () => {
             window.location.href = "https://studio.cattymod.app/settings#labs";
@@ -1412,40 +1603,29 @@
           window.location.href = "https://beta.cattymod.app/settings#labs";
         });
       }
-
       /* ------------------------- Navigation ------------------------- */
       const navButtons = document.querySelectorAll(".nav-button[data-page]");
       const pages = document.querySelectorAll(".page");
 
       function showPage(pageName, updateHash = true) {
         const validPages = ["general", "labs", "about"];
-
         if (!validPages.includes(pageName)) {
           pageName = "general";
         }
-
         navButtons.forEach(button => {
-          button.classList.toggle(
-            "active",
-            button.dataset.page === pageName
-          );
+          button.classList.toggle("active", button.dataset.page === pageName);
         });
-
         pages.forEach(page => {
-          page.style.display =
-            page.id === "page-" + pageName ? "" : "none";
+          page.style.display = page.id === "page-" + pageName ? "" : "none";
         });
-
         if (updateHash) {
           history.replaceState(null, "", "#" + pageName);
         }
-
         applySettingsAccent();
       }
 
       function loadPageFromHash() {
         const hash = window.location.hash.slice(1).toLowerCase();
-
         if (["general", "labs", "about"].includes(hash)) {
           showPage(hash, false);
         } else {
@@ -1453,24 +1633,19 @@
           showPage("general", false);
         }
       }
-
       navButtons.forEach(button => {
         button.addEventListener("click", () => {
           showPage(button.dataset.page);
         });
       });
-
       window.addEventListener("hashchange", loadPageFromHash);
-
       /* ------------------------- Addons ------------------------- */
       const addonsButton = document.getElementById("addons-button");
-
       if (addonsButton) {
         addonsButton.addEventListener("click", () => {
           window.open("/addons.html", "_blank", "noopener,noreferrer");
         });
       }
-
       /* ------------------------- Storage Sync ------------------------- */
       window.addEventListener("storage", event => {
         if (event.key === THEME_KEY) {
@@ -1479,40 +1654,28 @@
           loadBlockStyle();
           loadAccent();
         }
-
         if (event.key === CUSTOM_PROJECT_KEY) {
           loadCustomProject();
         }
-
         if (event.key === GO_ICON_KEY) {
           loadGoIcon();
         }
-
         if (event.key === MOBILE_TOUCH_CONTROLS_KEY) {
           loadMobileTouchControls();
         }
-
         if (event.key === GPT_ENABLED_KEY) {
           loadGptEnabled();
         }
-
         if (event.key === LOGO_VISIBLE_KEY || event.key === null) {
           loadLogoVisible();
         }
-
         if (event.key === PIP_ENABLED_KEY || event.key === null) {
           loadPipEnabled();
         }
-
-        if (
-          event.key === ADDONS_SHOW_KEY ||
-          event.key === ADVANCED_SHOW_KEY ||
-          event.key === null
-        ) {
+        if (event.key === ADDONS_SHOW_KEY || event.key === ADVANCED_SHOW_KEY || event.key === null) {
           loadMenuOptionVisibility();
         }
       });
-
       /* ------------------------- Navigation Position ------------------------- */
       const NAV_POSITION_KEY = "cattymod:navPos";
       const navPositionSelect = document.getElementById("nav-position-select");
@@ -1520,10 +1683,7 @@
       function getNavPosition() {
         try {
           const saved = localStorage.getItem(NAV_POSITION_KEY);
-
-          return ["Left", "Middle", "Right"].includes(saved)
-            ? saved
-            : "Middle";
+          return ["Left", "Middle", "Right"].includes(saved) ? saved : "Middle";
         } catch {
           return "Middle";
         }
@@ -1531,7 +1691,6 @@
 
       function loadNavPosition() {
         if (!navPositionSelect) return;
-
         navPositionSelect.value = getNavPosition();
       }
 
@@ -1539,22 +1698,98 @@
         if (!["Left", "Middle", "Right"].includes(position)) {
           position = "Left";
         }
-
         try {
           localStorage.setItem(NAV_POSITION_KEY, position);
         } catch (error) {
           console.error("Could not save navigation position:", error);
         }
-
         loadNavPosition();
       }
-
       if (navPositionSelect) {
         navPositionSelect.addEventListener("change", () => {
           setNavPosition(navPositionSelect.value);
         });
       }
+      /* ------------------------- Danger Zone ------------------------- */
+      const dangerZoneToggle = document.getElementById("danger-zone-toggle");
+      const dangerZoneContent = document.getElementById("danger-zone-content");
+      const clearAllDataButton = document.getElementById("clear-all-data-button");
+      const dangerModalOverlay = document.getElementById("danger-modal-overlay");
+      const dangerModalCancel = document.getElementById("danger-modal-cancel");
+      const dangerModalConfirm = document.getElementById("danger-modal-confirm");
+      let previousModalFocus = null;
 
+      function openDangerModal() {
+        if (!dangerModalOverlay) return;
+        previousModalFocus = document.activeElement;
+        dangerModalOverlay.hidden = false;
+        document.body.classList.add("modal-open");
+        dangerModalCancel.focus();
+      }
+
+      function closeDangerModal() {
+        if (!dangerModalOverlay || dangerModalOverlay.hidden) return;
+        dangerModalOverlay.hidden = true;
+        document.body.classList.remove("modal-open");
+        if (previousModalFocus?.isConnected) {
+          previousModalFocus.focus();
+        }
+      }
+      if (dangerZoneToggle && dangerZoneContent) {
+        dangerZoneToggle.addEventListener("click", () => {
+          const expanded = dangerZoneToggle.getAttribute("aria-expanded") === "true";
+          dangerZoneToggle.setAttribute("aria-expanded", String(!expanded));
+          dangerZoneContent.hidden = expanded;
+        });
+      }
+      if (clearAllDataButton) {
+        clearAllDataButton.addEventListener("click", openDangerModal);
+      }
+      if (dangerModalCancel) {
+        dangerModalCancel.addEventListener("click", closeDangerModal);
+      }
+      if (dangerModalOverlay) {
+        dangerModalOverlay.addEventListener("click", event => {
+          if (event.target === dangerModalOverlay) {
+            closeDangerModal();
+          }
+        });
+        document.addEventListener("keydown", event => {
+          if (dangerModalOverlay.hidden) return;
+          if (event.key === "Escape") {
+            closeDangerModal();
+          }
+          // Keep keyboard focus inside the modal.
+          if (event.key === "Tab") {
+            const focusable = [
+              dangerModalCancel,
+              dangerModalConfirm
+            ].filter(element => element && !element.disabled);
+            if (!focusable.length) return;
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            if (event.shiftKey && document.activeElement === first) {
+              event.preventDefault();
+              last.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+              event.preventDefault();
+              first.focus();
+            }
+          }
+        });
+      }
+      if (dangerModalConfirm) {
+        dangerModalConfirm.addEventListener("click", () => {
+          try {
+            localStorage.clear();
+            window.location.replace("https://cattymod.app");
+          } catch (error) {
+            console.error("Failed to clear localStorage:", error);
+            closeDangerModal();
+            window.alert("Could not clear localStorage. " + "Your browser may be blocking storage access.");
+          }
+        });
+      }
       /* ------------------------- Start ------------------------- */
       applyTheme();
       applySettingsAccent();
@@ -1570,38 +1805,25 @@
       loadNavPosition();
       loadPageFromHash();
     </script>
-
     <script>
       lucide.createIcons();
-
       document.addEventListener("DOMContentLoaded", () => {
         const params = new URLSearchParams(window.location.search);
         const from = params.get("from");
         const backButton = document.getElementById("back-to-cattymod");
-
         if (!backButton) return;
-
         let destination = "/";
-
         if (from) {
           try {
             const url = new URL(from);
-
-            const isCattyMod =
-              url.hostname === "cattymod.app" ||
-              url.hostname.endsWith(".cattymod.app");
-
-            if (
-              isCattyMod &&
-              (url.protocol === "https:" || url.protocol === "http:")
-            ) {
+            const isCattyMod = url.hostname === "cattymod.app" || url.hostname.endsWith(".cattymod.app");
+            if (isCattyMod && (url.protocol === "https:" || url.protocol === "http:")) {
               destination = url.href;
             }
           } catch {
             // Invalid URL: keep the fallback destination.
           }
         }
-
         backButton.addEventListener("click", () => {
           window.location.href = destination;
         });
