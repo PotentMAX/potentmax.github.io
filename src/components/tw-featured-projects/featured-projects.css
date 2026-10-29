@@ -1,3 +1,4 @@
+
 @import "../../css/colors.css";
 
 .container {
@@ -33,13 +34,18 @@
     position: relative;
     height: 155px;
 }
+
 .projects.transition {
     transition: .2s height;
 }
+
 .projects.opened {
     height: 310px;
 }
 
 .footer {
-    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }
