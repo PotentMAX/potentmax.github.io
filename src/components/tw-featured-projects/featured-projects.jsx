@@ -1,3 +1,4 @@
+
 import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -20,6 +21,7 @@ class FeaturedProjects extends React.Component {
             transition: true
         };
     }
+
     componentDidUpdate (prevProps) {
         if (this.props.projectId === '0' && prevProps.projectId === null) {
             // eslint-disable-next-line react/no-did-update-set-state
@@ -29,16 +31,24 @@ class FeaturedProjects extends React.Component {
             });
         }
     }
+
     handleSelect (id) {
         this.props.setProjectId(id);
     }
+
     handleOpenProjects () {
         this.setState({
             opened: true
         });
     }
+
     render () {
         const opened = this.state.opened;
+        const communityEnabled = (
+            typeof localStorage !== 'undefined' &&
+            localStorage.getItem('cattymod:communityEnabled') !== 'false'
+        );
+
         return (
             <div className={styles.container}>
                 <div
@@ -70,7 +80,15 @@ class FeaturedProjects extends React.Component {
                         </div>
                     )}
                 </div>
-                <div className={styles.footer}>
+                <div
+                    className={styles.footer}
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        width: '100%'
+                    }}
+                >
                     <a
                         target="_blank"
                         rel="noopener noreferrer"
@@ -82,6 +100,15 @@ class FeaturedProjects extends React.Component {
                             id="tw.featuredProjectsStudio"
                         />
                     </a>
+                    {communityEnabled && (
+                        <a
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href="https://cattymod.app/explore"
+                        >
+                            Open CattyMod Community
+                        </a>
+                    )}
                 </div>
             </div>
         );
