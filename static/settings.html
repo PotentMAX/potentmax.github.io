@@ -1082,6 +1082,31 @@
                 </div>
               </div>
             </div>
+              
+            <!-- COMMUNITY -->
+            <div class="section">
+              <div class="section-title">Community</div>
+              <div class="card">
+                <div class="setting-row">
+                  <div class="setting-info">
+                    <div class="setting-title">Community</div>
+                    <div class="setting-description">
+                      Explore and share projects with other users through File → Community.
+                      Disabling this only hides the Community option from the editor's File menu.
+                    </div>
+                  </div>
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      id="community-enabled-toggle"
+                      aria-label="Enable Community menu option"
+                    >
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
               <!-- DANGER ZONE -->
           <div class="section danger-zone">
             <div class="section-title">Danger Zone</div>
@@ -1190,6 +1215,7 @@
       const PIP_ENABLED_KEY = "cattymod:pipEnabled";
       const ADDONS_SHOW_KEY = "cattymod:addonsShow";
       const ADVANCED_SHOW_KEY = "cattymod:advancedShow";
+      const COMMUNITY_ENABLED_KEY = "cattymod:communityEnabled";
       /* ------------------------- Theme ------------------------- */
       const darkModeSelect = document.getElementById("dark-mode-select");
 
@@ -1442,6 +1468,34 @@
           setGptEnabled(gptEnabledToggle.checked);
         });
       }
+      
+      
+      /* ------------------------- Community ------------------------- */
+      const communityEnabledToggle = document.getElementById("community-enabled-toggle");
+
+      function getCommunityEnabled() {
+        // Enabled by default. Only the literal string "false" disables Community.
+        return localStorage.getItem(COMMUNITY_ENABLED_KEY) !== "false";
+      }
+
+      function loadCommunityEnabled() {
+        if (!communityEnabledToggle) return;
+        communityEnabledToggle.checked = getCommunityEnabled();
+        applySettingsAccent();
+      }
+
+      function setCommunityEnabled(enabled) {
+        localStorage.setItem(COMMUNITY_ENABLED_KEY, enabled ? "true" : "false");
+        loadCommunityEnabled();
+      }
+
+      if (communityEnabledToggle) {
+        communityEnabledToggle.addEventListener("change", () => {
+          setCommunityEnabled(communityEnabledToggle.checked);
+        });
+      }
+
+      
       /* ------------------------- Navbar Logo Visibility ------------------------- */
       const logoVisibleToggle = document.getElementById("logo-visible-toggle");
 
@@ -1670,6 +1724,9 @@
         if (event.key === PIP_ENABLED_KEY || event.key === null) {
           loadPipEnabled();
         }
+        if (event.key === COMMUNITY_ENABLED_KEY || event.key === null) {
+          loadCommunityEnabled();
+        }
         if (event.key === ADDONS_SHOW_KEY || event.key === ADVANCED_SHOW_KEY || event.key === null) {
           loadMenuOptionVisibility();
         }
@@ -1797,6 +1854,7 @@
       loadGoIcon();
       loadMobileTouchControls();
       loadGptEnabled();
+      loadCommunityEnabled();
       loadLogoVisible();
       loadPipEnabled();
       loadMenuOptionVisibility();
