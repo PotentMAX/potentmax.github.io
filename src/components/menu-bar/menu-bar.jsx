@@ -265,6 +265,15 @@ constructor (props) {
         }
     }
 
+    // Hide Community only when explicitly disabled in CattyMod settings.
+isCommunityButtonVisible () {
+    try {
+        return window.localStorage.getItem('cattymod:communityEnabled') !== 'false';
+    } catch (e) {
+        return true;
+    }
+}
+
     // Hide Addons only when explicitly disabled in CattyMod settings.
     isAddonButtonVisible () {
         try {
@@ -1133,7 +1142,7 @@ const menuBar = (
                                                 />
                                             </MenuItem>
 
-                                            {!isEmbeddedEditor && (
+{!isEmbeddedEditor && this.isCommunityButtonVisible() && (
                                                 <MenuItem
                                                     isRtl={this.props.isRtl}
                                                     onClick={() => {
