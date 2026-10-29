@@ -19,7 +19,7 @@ const decorate = text => {
     ));
 
     // Make links clickable
-    // Redirect Scratch project links to CattyMod Reflective
+    // Redirect Scratch project links to CattyMod
     const linkRegex = /(https?:\/\/[\w\d_\-.]{1,256}(?:\/(?:\S*[\w:/#[\]@$&'()*+=])?)?(?![^?!,:;\w\s]\S))/g;
 
     text = reactStringReplace(text, linkRegex, (match, i) => {
@@ -72,13 +72,13 @@ const Description = ({
     <div className={styles.description}>
         <div className={styles.projectLink}>
             <a
-                href={`https://reflective.cattymod.app/#${projectId}`}
+                href={`https://scratch.mit.edu/projects/${projectId}/`}
                 target="_blank"
                 rel="noreferrer"
             >
                 <FormattedMessage
-                    defaultMessage="View project on CattyMod Reflective"
-                    description="Link to view project on CattyMod Reflective"
+                    defaultMessage="View project on Scratch"
+                    description="Link to view project on Scratch"
                     id="tw.viewOnScratch"
                 />
             </a>
