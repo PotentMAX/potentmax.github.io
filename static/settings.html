@@ -1837,7 +1837,7 @@
         dangerModalConfirm.addEventListener("click", () => {
           try {
             localStorage.clear();
-            window.location.replace("https://cattymod.app");
+            window.location.replace("/");
           } catch (error) {
             console.error("Failed to clear localStorage:", error);
             closeDangerModal();
