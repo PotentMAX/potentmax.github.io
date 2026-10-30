@@ -17,7 +17,10 @@ const tips = [
     'Tip: Go to the bottom of the page to see cool projects!',
     'Fact: CattyMod has 100+ preset blocks!',
     'Tip: Use Extensions to add abilities to your project!',
-    'Fact: There are exactly 7 Facts and Tips including this one!'
+    'Fact: CattyMod was created on July 6th 2025!',
+    'Tip: Share your projects on CattyMod Community!',
+    'Fact: Dango has the colors Pink, Red and Blue!',
+    'Fact: There are exactly 10 Facts and Tips including this one!'
 ];
 
 let usedTips = [];
