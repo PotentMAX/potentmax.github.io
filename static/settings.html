@@ -240,10 +240,10 @@
       .setting-row+.setting-row {
         border-top: 1px solid var(--border);
       }
-      
-      .setting-options + .setting-row {
+
+      .setting-options+.setting-row {
         border-top: 1px solid var(--border);
-     }
+      }
 
       .setting-info {
         min-width: 0;
@@ -483,31 +483,31 @@
         font-size: 14px;
         line-height: 1.5;
       }
-      
+
       .commit-version {
-  margin-top: 10px;
-  font-size: 13px;
-  color: var(--muted);
-}
+        margin-top: 10px;
+        font-size: 13px;
+        color: var(--muted);
+      }
 
-.commit-version a {
-  color: var(--accent);
-  text-decoration: none;
-  font-family: monospace;
-  font-weight: 600;
-  transition: opacity .15s ease;
-}
+      .commit-version a {
+        color: var(--accent);
+        text-decoration: none;
+        font-family: monospace;
+        font-weight: 600;
+        transition: opacity .15s ease;
+      }
 
-.commit-version a:hover {
-  text-decoration: underline;
-  opacity: .8;
-}
+      .commit-version a:hover {
+        text-decoration: underline;
+        opacity: .8;
+      }
 
-.commit-version a:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-  border-radius: 3px;
-}
+      .commit-version a:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+        border-radius: 3px;
+      }
 
       /* Mods */
       .mods-container {
@@ -1073,7 +1073,7 @@
                   </div>
                 </div>
                 <div class="setting-row">
-  <div class="setting-info">
+                  <div class="setting-info">
                     <div class="setting-title">Picture in Picture</div>
                     <div class="setting-description"> Enable or disable Picture in Picture for projects. </div>
                   </div>
@@ -1083,17 +1083,15 @@
                   </label>
                 </div>
                 <div class="setting-row">
-  <div class="setting-info">
-    <div class="setting-title">Preferred Project File Type</div>
-    <div class="setting-description">
-      Choose the default file type for saving projects.
-    </div>
-  </div>
-  <select id="project-file-type-select" class="setting-select" aria-label="Preferred Project File Type">
-    <option value="cmp">CMP (CattyMod Project)</option>
-    <option value="sb3">SB3 (Scratch Project)</option>
-  </select>
-</div>
+                  <div class="setting-info">
+                    <div class="setting-title">Preferred Project File Type</div>
+                    <div class="setting-description"> Choose the file format used when saving projects. Most users should keep CMP selected.</div>
+                  </div>
+                  <select id="project-file-type-select" class="setting-select" aria-label="Preferred Project File Type">
+                    <option value="cmp">CMP (CattyMod Project)</option>
+                    <option value="sb3">SB3 (Scratch Project)</option>
+                  </select>
+                </div>
               </div>
             </div>
           </section>
@@ -1246,9 +1244,8 @@
                 </div>
               </div>
               <p class="about-description"> Block-based coding with tons of capabilities. </p>
-              <div class="about-version commit-version">
-  Version <a id="commit-link" href="#" target="_blank" rel="noopener noreferrer"></a>
-</div>
+              <div class="about-version commit-version"> Version <a id="commit-link" href="#" target="_blank" rel="noopener noreferrer"></a>
+              </div>
             </div>
             <div style="height:16px;"></div>
             <div class="card about-card">
@@ -1390,21 +1387,14 @@
           applySettingsAccent();
         }
       });
-      
       const commitVersion = "YOUR_COMMIT_SHA_HERE";
-
-const commitLink = document.getElementById("commit-link");
-
-if (commitLink && commitVersion) {
-  const shortCommit = commitVersion.slice(0, 7);
-
-  const repo = window.location.hostname === "beta.cattymod.app"
-    ? "cattymod/beta-gui"
-    : "cattymod/scratch-gui";
-
-  commitLink.textContent = shortCommit;
-  commitLink.href = `https://github.com/${repo}/commit/${commitVersion}`;
-}
+      const commitLink = document.getElementById("commit-link");
+      if (commitLink && commitVersion) {
+        const shortCommit = commitVersion.slice(0, 7);
+        const repo = window.location.hostname === "beta.cattymod.app" ? "cattymod/beta-gui" : "cattymod/scratch-gui";
+        commitLink.textContent = shortCommit;
+        commitLink.href = `https://github.com/${repo}/commit/${commitVersion}`;
+      }
       /* ------------------------- Accent ------------------------- */
       const accentSelect = document.getElementById("accent-select");
       const ACCENT_COLORS = {
@@ -1667,37 +1657,31 @@ if (commitLink && commitVersion) {
           setPipEnabled(pipEnabledToggle.checked);
         });
       }
-      
       /* ------------------------- Preferred Project File Type ------------------------- */
-const projectFileTypeSelect = document.getElementById("project-file-type-select");
+      const projectFileTypeSelect = document.getElementById("project-file-type-select");
 
-function getPreferredProjectFileType() {
-  const saved = localStorage.getItem(SB_SAVE_KEY);
+      function getPreferredProjectFileType() {
+        const saved = localStorage.getItem(SB_SAVE_KEY);
+        // SB3 is enabled only when the value is explicitly "true".
+        // Missing or invalid values default to CMP.
+        return saved === "true" ? "sb3" : "cmp";
+      }
 
-  // SB3 is enabled only when the value is explicitly "true".
-  // Missing or invalid values default to CMP.
-  return saved === "true" ? "sb3" : "cmp";
-}
+      function loadPreferredProjectFileType() {
+        if (!projectFileTypeSelect) return;
+        projectFileTypeSelect.value = getPreferredProjectFileType();
+      }
 
-function loadPreferredProjectFileType() {
-  if (!projectFileTypeSelect) return;
-
-  projectFileTypeSelect.value = getPreferredProjectFileType();
-}
-
-function setPreferredProjectFileType(type) {
-  if (!["cmp", "sb3"].includes(type)) return;
-
-  localStorage.setItem(SB_SAVE_KEY, type === "sb3" ? "true" : "false");
-
-  loadPreferredProjectFileType();
-}
-
-if (projectFileTypeSelect) {
-  projectFileTypeSelect.addEventListener("change", () => {
-    setPreferredProjectFileType(projectFileTypeSelect.value);
-  });
-}
+      function setPreferredProjectFileType(type) {
+        if (!["cmp", "sb3"].includes(type)) return;
+        localStorage.setItem(SB_SAVE_KEY, type === "sb3" ? "true" : "false");
+        loadPreferredProjectFileType();
+      }
+      if (projectFileTypeSelect) {
+        projectFileTypeSelect.addEventListener("change", () => {
+          setPreferredProjectFileType(projectFileTypeSelect.value);
+        });
+      }
       /* ------------------------- Custom Default Project ------------------------- */
       const customProjectToggle = document.getElementById("custom-project-toggle");
       const customProjectOptions = document.getElementById("custom-project-options");
@@ -1888,7 +1872,7 @@ if (projectFileTypeSelect) {
           loadMenuOptionVisibility();
         }
         if (event.key === SB_SAVE_KEY || event.key === null) {
-            loadPreferredProjectFileType();
+          loadPreferredProjectFileType();
         }
       });
       /* ------------------------- Danger Zone ------------------------- */
