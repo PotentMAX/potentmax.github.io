@@ -103,9 +103,13 @@ class SB3Downloader extends React.Component {
                 suggestedName: this.props.projectFilename,
                 types: [
                     {
-                        description: 'CattyMod Project',
+                        description: getPreferredFileType() === 'sb3' ?
+    'Scratch Project' :
+    'CattyMod Project',
 accept: {
-    'application/octet-stream': ['.cmp']
+    'application/octet-stream': [
+        `.${getPreferredFileType()}`
+    ]
 }
                     }
                 ],
@@ -269,12 +273,18 @@ accept: {
     }
 }
 
+const getPreferredFileType = () => {
+    return localStorage.getItem('cattymod:sbSave') === 'true' ?
+        'sb3' :
+        'cmp';
+};
 const getProjectFilename = (curTitle, defaultTitle) => {
     let filenameTitle = curTitle;
     if (!filenameTitle || filenameTitle.length === 0) {
         filenameTitle = defaultTitle;
     }
-    return `${filenameTitle.substring(0, 100)}.cmp`;
+
+    return `${filenameTitle.substring(0, 100)}.${getPreferredFileType()}`;
 };
 
 SB3Downloader.propTypes = {
