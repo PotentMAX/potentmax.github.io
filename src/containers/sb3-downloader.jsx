@@ -1,3 +1,4 @@
+
 import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -52,17 +53,6 @@ const concatenateByteArrays = arrays => {
 
 /**
  * CattyMod Project saver component passes a downloadProject function to its child.
- * It expects this child to be a function with the signature
- *     function (downloadProject, props) {}
- * The component can then be used to attach project saving functionality
- * to any other component:
- *
- * <SB3Downloader>{(downloadProject, props) => (
- *     <MyCoolComponent
- *         onClick={downloadProject}
- *         {...props}
- *     />
- * )}</SB3Downloader>
  */
 class SB3Downloader extends React.Component {
     constructor (props) {
@@ -74,9 +64,11 @@ class SB3Downloader extends React.Component {
             'saveToLastFileOrNew'
         ]);
     }
+
     startedSaving () {
         this.props.onShowSavingAlert();
     }
+
     finishedSaving () {
         this.props.onProjectUnchanged();
         this.props.onShowSaveSuccessAlert();
@@ -84,6 +76,7 @@ class SB3Downloader extends React.Component {
             this.props.onSaveFinished();
         }
     }
+
     downloadProject () {
         if (!this.props.canSaveProject) {
             return;
@@ -94,23 +87,25 @@ class SB3Downloader extends React.Component {
             downloadBlob(this.props.projectFilename, content);
         });
     }
+
     async saveAsNew () {
         if (!this.props.canSaveProject) {
             return;
         }
         try {
+            const fileType = getPreferredFileType();
             const handle = await this.props.showSaveFilePicker({
                 suggestedName: this.props.projectFilename,
                 types: [
                     {
-                        description: getPreferredFileType() === 'sb3' ?
-    'Scratch Project' :
-    'CattyMod Project',
-accept: {
-    'application/octet-stream': [
-        `.${getPreferredFileType()}`
-    ]
-}
+                        description: fileType === 'cmp' ?
+                            'CattyMod Project' :
+                            'Renamed CattyMod Project',
+                        accept: {
+                            'application/octet-stream': [
+                                `.${fileType}`
+                            ]
+                        }
                     }
                 ],
                 excludeAcceptAllOption: true
@@ -125,6 +120,7 @@ accept: {
             this.handleSaveError(e);
         }
     }
+
     async saveToLastFile () {
         try {
             await this.saveToHandle(this.props.fileHandle);
@@ -132,12 +128,14 @@ accept: {
             this.handleSaveError(e);
         }
     }
+
     saveToLastFileOrNew () {
         if (this.props.fileHandle) {
             return this.saveToLastFile();
         }
         return this.saveAsNew();
     }
+
     async saveToHandle (handle) {
         if (!this.props.canSaveProject) {
             return;
@@ -147,8 +145,6 @@ accept: {
         this.startedSaving();
 
         await new Promise((resolve, reject) => {
-            // Projects can be very large, so we'll utilize JSZip's stream API to avoid having the
-            // entire sb3 in memory at the same time.
             const jszipStream = this.props.saveProjectSb3Stream();
 
             const abortController = new AbortController();
@@ -156,10 +152,6 @@ accept: {
                 abortController.abort(error);
             });
 
-            // JSZip's stream pause() and resume() methods are not necessarily completely no-ops
-            // if they are already paused or resumed. These also make it easier to add debug
-            // logging of when we actually pause or resume.
-            // Note that JSZip will keep sending some data after you ask it to pause.
             let jszipStreamRunning = false;
             const pauseJSZipStream = () => {
                 if (jszipStreamRunning) {
@@ -174,12 +166,7 @@ accept: {
                 }
             };
 
-            // Allow the JSZip stream to run quite a bit ahead of file writing. This helps
-            // reduce zip stream pauses on systems with high latency storage.
             const HIGH_WATER_MARK_BYTES = 1024 * 1024 * 5;
-
-            // Minimum size of buffer to pass into write(). Small buffers will be queued and
-            // written in batches as they reach or exceed this size.
             const WRITE_BUFFER_TARGET_SIZE_BYTES = 1024 * 1024;
 
             const zipStream = new ReadableStream({
@@ -215,15 +202,12 @@ accept: {
                         queuedChunks.length = 0;
                         return writable.write(newBuffer);
                     }
-                    // Otherwise wait for more data
                 },
                 close: async () => {
-                    // Write the last batch of data.
                     const lastBuffer = concatenateByteArrays(queuedChunks);
                     if (lastBuffer.byteLength) {
                         await writable.write(lastBuffer);
                     }
-                    // File handle must be closed at the end to actually save the file.
                     await writable.close();
                 },
                 abort: async () => {
@@ -243,14 +227,15 @@ accept: {
                 });
         });
     }
+
     handleSaveError (e) {
-        // AbortError can happen when someone cancels the file selector dialog
         if (e && e.name === 'AbortError') {
             return;
         }
         log.error(e);
         this.props.onShowSaveErrorAlert();
     }
+
     render () {
         const {
             children
@@ -274,10 +259,12 @@ accept: {
 }
 
 const getPreferredFileType = () => {
-    return localStorage.getItem('cattymod:sbSave') === 'true' ?
-        'sb3' :
-        'cmp';
+    const validTypes = ['cmp', 'pmp', 'snail', 'sb3', 'zip'];
+    const savedType = localStorage.getItem('cattymod:saveFileType');
+
+    return validTypes.includes(savedType) ? savedType : 'cmp';
 };
+
 const getProjectFilename = (curTitle, defaultTitle) => {
     let filenameTitle = curTitle;
     if (!filenameTitle || filenameTitle.length === 0) {
@@ -306,6 +293,7 @@ SB3Downloader.propTypes = {
     onProjectUnchanged: PropTypes.func,
     showSaveFilePicker: PropTypes.func
 };
+
 SB3Downloader.defaultProps = {
     className: '',
     showSaveFilePicker: typeof showSaveFilePicker === 'function' && !navigator.userAgent.includes('Android') ?
