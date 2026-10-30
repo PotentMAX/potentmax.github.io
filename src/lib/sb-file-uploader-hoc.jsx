@@ -148,14 +148,17 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                 }
                 if (uploadAllowed) {
                     // Don't update file handle until after confirming replace.
-                    const handle = thisFileInput.handle;
-                    if (handle) {
-if (/\.(?:cmp|zip|pmp|snail|sb3)$/i.test(this.fileToUpload.name)) {
-    this.props.onSetFileHandle(handle);
-                        } else {
-                            this.props.onSetFileHandle(null);
-                        }
-                    }
+const handle = thisFileInput.handle;
+
+if (handle) {
+    // Only preserve the file handle for native CattyMod projects.
+    if (/\.cmp$/i.test(this.fileToUpload.name)) {
+        this.props.onSetFileHandle(handle);
+    } else {
+        // Imported formats should be saved as CMP.
+        this.props.onSetFileHandle(null);
+    }
+}
 
                     // cues step 4
                     this.props.requestProjectUpload(loadingState);
