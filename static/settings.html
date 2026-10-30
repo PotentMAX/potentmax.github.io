@@ -241,6 +241,10 @@
         border-top: 1px solid var(--border);
       }
 
+      .setting-options+.setting-row {
+        border-top: 1px solid var(--border);
+      }
+
       .setting-info {
         min-width: 0;
       }
@@ -479,31 +483,31 @@
         font-size: 14px;
         line-height: 1.5;
       }
-      
+
       .commit-version {
-  margin-top: 10px;
-  font-size: 13px;
-  color: var(--muted);
-}
+        margin-top: 10px;
+        font-size: 13px;
+        color: var(--muted);
+      }
 
-.commit-version a {
-  color: var(--accent);
-  text-decoration: none;
-  font-family: monospace;
-  font-weight: 600;
-  transition: opacity .15s ease;
-}
+      .commit-version a {
+        color: var(--accent);
+        text-decoration: none;
+        font-family: monospace;
+        font-weight: 600;
+        transition: opacity .15s ease;
+      }
 
-.commit-version a:hover {
-  text-decoration: underline;
-  opacity: .8;
-}
+      .commit-version a:hover {
+        text-decoration: underline;
+        opacity: .8;
+      }
 
-.commit-version a:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-  border-radius: 3px;
-}
+      .commit-version a:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+        border-radius: 3px;
+      }
 
       /* Mods */
       .mods-container {
@@ -1078,6 +1082,19 @@
                     <span class="slider"></span>
                   </label>
                 </div>
+                <div class="setting-row">
+                  <div class="setting-info">
+                    <div class="setting-title">Preferred Project File Type</div>
+                    <div class="setting-description"> Choose the file format used when saving projects. Most users should keep CMP selected.</div>
+                  </div>
+                  <select id="project-file-type-select" class="setting-select" aria-label="Preferred Project File Type">
+                    <option value="cmp">CMP (CattyMod Project)</option>
+                    <option value="pmp">PMP (PenguinMod Project)</option>
+                    <option value="snail">Snail (Snail IDE Project)</option>
+                    <option value="sb3">SB3 (Scratch Project)</option>
+                    <option value="zip">ZIP (Generic Project)</option>
+                  </select>
+                </div>
               </div>
             </div>
           </section>
@@ -1230,9 +1247,8 @@
                 </div>
               </div>
               <p class="about-description"> Block-based coding with tons of capabilities. </p>
-              <div class="about-version commit-version">
-  Version <a id="commit-link" href="#" target="_blank" rel="noopener noreferrer"></a>
-</div>
+              <div class="about-version commit-version"> Version <a id="commit-link" href="#" target="_blank" rel="noopener noreferrer"></a>
+              </div>
             </div>
             <div style="height:16px;"></div>
             <div class="card about-card">
@@ -1293,6 +1309,7 @@
       const ADVANCED_SHOW_KEY = "cattymod:advancedShow";
       const COMMUNITY_ENABLED_KEY = "cattymod:communityEnabled";
       const NAV_POSITION_KEY = "cattymod:navPos";
+      const SAVE_FILE_TYPE_KEY = "cattymod:saveFileType";
       /* ------------------------- Theme ------------------------- */
       const darkModeSelect = document.getElementById("dark-mode-select");
 
@@ -1373,21 +1390,14 @@
           applySettingsAccent();
         }
       });
-      
       const commitVersion = "YOUR_COMMIT_SHA_HERE";
-
-const commitLink = document.getElementById("commit-link");
-
-if (commitLink && commitVersion) {
-  const shortCommit = commitVersion.slice(0, 7);
-
-  const repo = window.location.hostname === "beta.cattymod.app"
-    ? "cattymod/beta-gui"
-    : "cattymod/scratch-gui";
-
-  commitLink.textContent = shortCommit;
-  commitLink.href = `https://github.com/${repo}/commit/${commitVersion}`;
-}
+      const commitLink = document.getElementById("commit-link");
+      if (commitLink && commitVersion) {
+        const shortCommit = commitVersion.slice(0, 7);
+        const repo = window.location.hostname === "beta.cattymod.app" ? "cattymod/beta-gui" : "cattymod/scratch-gui";
+        commitLink.textContent = shortCommit;
+        commitLink.href = `https://github.com/${repo}/commit/${commitVersion}`;
+      }
       /* ------------------------- Accent ------------------------- */
       const accentSelect = document.getElementById("accent-select");
       const ACCENT_COLORS = {
@@ -1650,6 +1660,32 @@ if (commitLink && commitVersion) {
           setPipEnabled(pipEnabledToggle.checked);
         });
       }
+      /* ------------------------- Preferred Project File Type ------------------------- */
+      const projectFileTypeSelect = document.getElementById("project-file-type-select");
+      const VALID_PROJECT_FILE_TYPES = ["cmp", "pmp", "snail", "sb3", "zip"];
+
+      function getPreferredProjectFileType() {
+        const saved = localStorage.getItem(SAVE_FILE_TYPE_KEY);
+        return VALID_PROJECT_FILE_TYPES.includes(saved) ? saved : "cmp";
+      }
+
+      function loadPreferredProjectFileType() {
+        if (!projectFileTypeSelect) return;
+        projectFileTypeSelect.value = getPreferredProjectFileType();
+      }
+
+      function setPreferredProjectFileType(type) {
+        if (!VALID_PROJECT_FILE_TYPES.includes(type)) {
+          type = "cmp";
+        }
+        localStorage.setItem(SAVE_FILE_TYPE_KEY, type);
+        loadPreferredProjectFileType();
+      }
+      if (projectFileTypeSelect) {
+        projectFileTypeSelect.addEventListener("change", () => {
+          setPreferredProjectFileType(projectFileTypeSelect.value);
+        });
+      }
       /* ------------------------- Custom Default Project ------------------------- */
       const customProjectToggle = document.getElementById("custom-project-toggle");
       const customProjectOptions = document.getElementById("custom-project-options");
@@ -1839,6 +1875,9 @@ if (commitLink && commitVersion) {
         if (event.key === MODS_SHOW_KEY || event.key === ADVANCED_SHOW_KEY || event.key === null) {
           loadMenuOptionVisibility();
         }
+        if (event.key === SAVE_FILE_TYPE_KEY || event.key === null) {
+          loadPreferredProjectFileType();
+        }
       });
       /* ------------------------- Danger Zone ------------------------- */
       const dangerZoneToggle = document.getElementById("danger-zone-toggle");
@@ -1952,6 +1991,7 @@ if (commitLink && commitVersion) {
       loadCommunityEnabled();
       loadLogoVisible();
       loadPipEnabled();
+      loadPreferredProjectFileType();
       loadMenuOptionVisibility();
       loadNavPosition();
       loadPageFromHash();
