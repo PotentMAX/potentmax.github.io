@@ -79,20 +79,21 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                         const [handle] = await this.props.showOpenFilePicker({
                             multiple: false,
                             types: [
-                                {
-                                    description: 'Scratch Project',
-                                    accept: {
-                                        // Chrome on Android tracks the MIME type of files that get downloaded and
-                                        // then actually enforces that the type must match in showOpenFilePicker()
-                                        // and does not allow the user to override the filter. As Scratch projects have
-                                        // no well-defined and well-adopted MIME types, we can't assume anything about
-                                        // what MIME type they are saved with, so we have to use the most broad MIME
-                                        // type here. Otherwise some users just won't be able to load files for no
-                                        // fault of their own.
-                                        '*/*': ['.sb', '.sb2', '.sb3']
-                                    }
-                                }
-                            ]
+    {
+        description: 'CattyMod Project',
+        accept: {
+            '*/*': [
+                '.cmp',
+                '.zip',
+                '.pmp',
+                '.snail',
+                '.sb',
+                '.sb2',
+                '.sb3'
+            ]
+        }
+    }
+]
                         });
                         const file = await handle.getFile();
                         this.handleChange({
@@ -112,7 +113,7 @@ const SBFileUploaderHOC = function (WrappedComponent) {
             } else {
                 // create <input> element and add it to DOM
                 this.inputElement = document.createElement('input');
-                this.inputElement.accept = '.sb,.sb2,.sb3';
+                this.inputElement.accept = '.cmp,.zip,.pmp,.snail,.sb,.sb2,.sb3';                
                 this.inputElement.style = 'display: none;';
                 this.inputElement.type = 'file';
                 this.inputElement.onchange = this.handleChange; // connects to step 3
@@ -147,14 +148,17 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                 }
                 if (uploadAllowed) {
                     // Don't update file handle until after confirming replace.
-                    const handle = thisFileInput.handle;
-                    if (handle) {
-                        if (this.fileToUpload.name.endsWith('.sb3')) {
-                            this.props.onSetFileHandle(handle);
-                        } else {
-                            this.props.onSetFileHandle(null);
-                        }
-                    }
+const handle = thisFileInput.handle;
+
+if (handle) {
+    // Only preserve the file handle for native CattyMod projects.
+    if (/\.cmp$/i.test(this.fileToUpload.name)) {
+        this.props.onSetFileHandle(handle);
+    } else {
+        // Imported formats should be saved as CMP.
+        this.props.onSetFileHandle(null);
+    }
+}
 
                     // cues step 4
                     this.props.requestProjectUpload(loadingState);
@@ -182,14 +186,17 @@ const SBFileUploaderHOC = function (WrappedComponent) {
             }
         }
         // used in step 6 below
-        getProjectTitleFromFilename (fileInputFilename) {
-            if (!fileInputFilename) return '';
-            // only parse title with valid scratch project extensions
-            // (.sb, .sb2, and .sb3)
-            const matches = fileInputFilename.match(/^(.*)\.sb[23]?$/);
-            if (!matches) return '';
-            return matches[1].substring(0, 100); // truncate project title to max 100 chars
-        }
+getProjectTitleFromFilename (fileInputFilename) {
+    if (!fileInputFilename) return '';
+
+    const matches = fileInputFilename.match(
+        /^(.*)\.(?:cmp|zip|pmp|snail|sb3|sb2|sb)$/i
+    );
+
+    if (!matches) return '';
+
+    return matches[1].substring(0, 100);
+}
         // step 6: attached as a handler on our FileReader object; called when
         // file upload raw data is available in the reader
         onload () {
