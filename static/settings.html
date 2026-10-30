@@ -240,6 +240,10 @@
       .setting-row+.setting-row {
         border-top: 1px solid var(--border);
       }
+      
+      .setting-options + .setting-row {
+        border-top: 1px solid var(--border);
+     }
 
       .setting-info {
         min-width: 0;
@@ -1069,7 +1073,7 @@
                   </div>
                 </div>
                 <div class="setting-row">
-                  <div class="setting-info">
+  <div class="setting-info">
                     <div class="setting-title">Picture in Picture</div>
                     <div class="setting-description"> Enable or disable Picture in Picture for projects. </div>
                   </div>
@@ -1078,6 +1082,18 @@
                     <span class="slider"></span>
                   </label>
                 </div>
+                <div class="setting-row">
+  <div class="setting-info">
+    <div class="setting-title">Preferred Project File Type</div>
+    <div class="setting-description">
+      Choose the default file type for saving projects.
+    </div>
+  </div>
+  <select id="project-file-type-select" class="setting-select" aria-label="Preferred Project File Type">
+    <option value="cmp">CMP (CattyMod Project)</option>
+    <option value="sb3">SB3 (Scratch Project)</option>
+  </select>
+</div>
               </div>
             </div>
           </section>
@@ -1293,6 +1309,7 @@
       const ADVANCED_SHOW_KEY = "cattymod:advancedShow";
       const COMMUNITY_ENABLED_KEY = "cattymod:communityEnabled";
       const NAV_POSITION_KEY = "cattymod:navPos";
+      const SB_SAVE_KEY = "cattymod:sbSave";
       /* ------------------------- Theme ------------------------- */
       const darkModeSelect = document.getElementById("dark-mode-select");
 
@@ -1650,6 +1667,37 @@ if (commitLink && commitVersion) {
           setPipEnabled(pipEnabledToggle.checked);
         });
       }
+      
+      /* ------------------------- Preferred Project File Type ------------------------- */
+const projectFileTypeSelect = document.getElementById("project-file-type-select");
+
+function getPreferredProjectFileType() {
+  const saved = localStorage.getItem(SB_SAVE_KEY);
+
+  // SB3 is enabled only when the value is explicitly "true".
+  // Missing or invalid values default to CMP.
+  return saved === "true" ? "sb3" : "cmp";
+}
+
+function loadPreferredProjectFileType() {
+  if (!projectFileTypeSelect) return;
+
+  projectFileTypeSelect.value = getPreferredProjectFileType();
+}
+
+function setPreferredProjectFileType(type) {
+  if (!["cmp", "sb3"].includes(type)) return;
+
+  localStorage.setItem(SB_SAVE_KEY, type === "sb3" ? "true" : "false");
+
+  loadPreferredProjectFileType();
+}
+
+if (projectFileTypeSelect) {
+  projectFileTypeSelect.addEventListener("change", () => {
+    setPreferredProjectFileType(projectFileTypeSelect.value);
+  });
+}
       /* ------------------------- Custom Default Project ------------------------- */
       const customProjectToggle = document.getElementById("custom-project-toggle");
       const customProjectOptions = document.getElementById("custom-project-options");
@@ -1839,6 +1887,9 @@ if (commitLink && commitVersion) {
         if (event.key === MODS_SHOW_KEY || event.key === ADVANCED_SHOW_KEY || event.key === null) {
           loadMenuOptionVisibility();
         }
+        if (event.key === SB_SAVE_KEY || event.key === null) {
+            loadPreferredProjectFileType();
+        }
       });
       /* ------------------------- Danger Zone ------------------------- */
       const dangerZoneToggle = document.getElementById("danger-zone-toggle");
@@ -1952,6 +2003,7 @@ if (commitLink && commitVersion) {
       loadCommunityEnabled();
       loadLogoVisible();
       loadPipEnabled();
+      loadPreferredProjectFileType();
       loadMenuOptionVisibility();
       loadNavPosition();
       loadPageFromHash();
