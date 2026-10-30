@@ -98,9 +98,13 @@ class SB3Downloader extends React.Component {
                 suggestedName: this.props.projectFilename,
                 types: [
                     {
-                        description: fileType === 'cmp' ?
-                            'CattyMod Project' :
-                            'Renamed CattyMod Project',
+                        description: ({
+                            cmp: 'CattyMod Project',
+                            sb3: 'Scratch Project',
+                            pmp: 'PenguinMod Project',
+                            snail: 'Snail IDE Project',
+                            zip: 'Generic Project'
+                        })[fileType] || 'CattyMod Project',
                         accept: {
                             'application/octet-stream': [
                                 `.${fileType}`
