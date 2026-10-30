@@ -479,6 +479,31 @@
         font-size: 14px;
         line-height: 1.5;
       }
+      
+      .commit-version {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.commit-version a {
+  color: var(--accent);
+  text-decoration: none;
+  font-family: monospace;
+  font-weight: 600;
+  transition: opacity .15s ease;
+}
+
+.commit-version a:hover {
+  text-decoration: underline;
+  opacity: .8;
+}
+
+.commit-version a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
 
       /* Mods */
       .mods-container {
@@ -1205,6 +1230,9 @@
                 </div>
               </div>
               <p class="about-description"> Block-based coding with tons of capabilities. </p>
+              <div class="about-version commit-version">
+  Version <a id="commit-link" href="#" target="_blank" rel="noopener noreferrer"></a>
+</div>
             </div>
             <div style="height:16px;"></div>
             <div class="card about-card">
@@ -1345,6 +1373,21 @@
           applySettingsAccent();
         }
       });
+      
+      const commitVersion = "YOUR_COMMIT_SHA_HERE";
+
+const commitLink = document.getElementById("commit-link");
+
+if (commitLink && commitVersion) {
+  const shortCommit = commitVersion.slice(0, 7);
+
+  const repo = window.location.hostname === "beta.cattymod.app"
+    ? "cattymod/beta-gui"
+    : "cattymod/scratch-gui";
+
+  commitLink.textContent = shortCommit;
+  commitLink.href = `https://github.com/${repo}/commit/${commitVersion}`;
+}
       /* ------------------------- Accent ------------------------- */
       const accentSelect = document.getElementById("accent-select");
       const ACCENT_COLORS = {
