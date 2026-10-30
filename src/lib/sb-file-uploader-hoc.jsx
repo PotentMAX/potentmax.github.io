@@ -112,7 +112,7 @@ const SBFileUploaderHOC = function (WrappedComponent) {
             } else {
                 // create <input> element and add it to DOM
                 this.inputElement = document.createElement('input');
-                this.inputElement.accept = '.cmp, .pmp, .snail, .zip, .sb, .sb2, .sb3';
+                this.inputElement.accept = '.cmp,.pmp,.snail,.zip,.sb,.sb2,.sb3';
                 this.inputElement.style = 'display: none;';
                 this.inputElement.type = 'file';
                 this.inputElement.onchange = this.handleChange; // connects to step 3
@@ -183,13 +183,16 @@ const SBFileUploaderHOC = function (WrappedComponent) {
         }
         // used in step 6 below
         getProjectTitleFromFilename (fileInputFilename) {
-            if (!fileInputFilename) return '';
-            // only parse title with valid scratch project extensions
-            // (.sb, .sb2, and .sb3)
-            const matches = fileInputFilename.match(/^(.*)\.sb[23]?$/);
-            if (!matches) return '';
-            return matches[1].substring(0, 100); // truncate project title to max 100 chars
-        }
+    if (!fileInputFilename) return '';
+
+    // Accept Scratch and CattyMod project extensions
+    const matches = fileInputFilename.match(/^(.*)\.(?:sb[23]?|cmp)$/i);
+
+    if (!matches) return '';
+
+    // Always use the .cmp extension
+    return `${matches[1].substring(0, 100)}.cmp`;
+}
         // step 6: attached as a handler on our FileReader object; called when
         // file upload raw data is available in the reader
         onload () {
