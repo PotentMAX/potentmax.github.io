@@ -27,12 +27,6 @@ import {
 
 /**
  * Higher Order Component to provide behavior for loading local project files into editor.
- * @param {React.Component} WrappedComponent the component to add project file loading functionality to
- * @returns {React.Component} WrappedComponent with project file loading functionality added
- *
- * <SBFileUploaderHOC>
- *     <WrappedComponent />
- * </SBFileUploaderHOC>
  */
 const SBFileUploaderHOC = function (WrappedComponent) {
     class SBFileUploaderComponent extends React.Component {
@@ -47,32 +41,37 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                 'onload',
                 'removeFileObjects'
             ]);
-            // tw: We have multiple instances of this HOC alive at a time. This flag fixes issues that arise from that.
+
             this.expectingFileUploadFinish = false;
         }
+
         componentDidUpdate (prevProps) {
-            if (this.props.isLoadingUpload && !prevProps.isLoadingUpload && this.expectingFileUploadFinish) {
-                this.handleFinishedLoadingUpload(); // cue step 5 below
+            if (
+                this.props.isLoadingUpload &&
+                !prevProps.isLoadingUpload &&
+                this.expectingFileUploadFinish
+            ) {
+                this.handleFinishedLoadingUpload();
             }
         }
+
         componentWillUnmount () {
             this.removeFileObjects();
         }
-        // step 1: this is where the upload process begins
+
+        // Step 1: Begin file upload.
         handleStartSelectingFileUpload () {
             this.expectingFileUploadFinish = true;
-            this.createFileObjects(); // go to step 2
+            this.createFileObjects();
         }
-        // step 2: create a FileReader and an <input> element, and issue a
-        // pseudo-click to it. That will open the file chooser dialog.
+
+        // Step 2: Create FileReader and file picker.
         createFileObjects () {
-            // redo step 7, in case it got skipped last time and its objects are
-            // still in memory
             this.removeFileObjects();
-            // create fileReader
+
             this.fileReader = new FileReader();
             this.fileReader.onload = this.onload;
-            // tw: Use FS API when available
+
             if (this.props.showOpenFilePicker) {
                 (async () => {
                     try {
@@ -82,19 +81,22 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                                 {
                                     description: 'CattyMod Project',
                                     accept: {
-                                        // Chrome on Android tracks the MIME type of files that get downloaded and
-                                        // then actually enforces that the type must match in showOpenFilePicker()
-                                        // and does not allow the user to override the filter. As Scratch projects have
-                                        // no well-defined and well-adopted MIME types, we can't assume anything about
-                                        // what MIME type they are saved with, so we have to use the most broad MIME
-                                        // type here. Otherwise some users just won't be able to load files for no
-                                        // fault of their own.
-                                        '*/*': ['.cmp', '.pmp', '.snail', '.zip', '.sb', '.sb2', '.sb3']
+                                        '*/*': [
+                                            '.cmp',
+                                            '.pmp',
+                                            '.snail',
+                                            '.zip',
+                                            '.sb',
+                                            '.sb2',
+                                            '.sb3'
+                                        ]
                                     }
                                 }
                             ]
                         });
+
                         const file = await handle.getFile();
+
                         this.handleChange({
                             target: {
                                 files: [file],
@@ -102,27 +104,27 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                             }
                         });
                     } catch (err) {
-                        // If the user aborted it, that's not an error.
                         if (err && err.name === 'AbortError') {
                             return;
                         }
+
                         log.error(err);
                     }
                 })();
             } else {
-                // create <input> element and add it to DOM
                 this.inputElement = document.createElement('input');
-                this.inputElement.accept = '.cmp,.pmp,.snail,.zip,.sb,.sb2,.sb3';
+                this.inputElement.accept =
+                    '.cmp,.pmp,.snail,.zip,.sb,.sb2,.sb3';
                 this.inputElement.style = 'display: none;';
                 this.inputElement.type = 'file';
-                this.inputElement.onchange = this.handleChange; // connects to step 3
+                this.inputElement.onchange = this.handleChange;
+
                 document.body.appendChild(this.inputElement);
-                // simulate a click to open file chooser dialog
                 this.inputElement.click();
             }
         }
-        // step 3: user has picked a file using the file chooser dialog.
-        // We don't actually load the file here, we only decide whether to do so.
+
+        // Step 3: Handle selected file.
         handleChange (e) {
             const {
                 intl,
@@ -131,23 +133,23 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                 projectChanged,
                 userOwnsProject
             } = this.props;
+
             const thisFileInput = e.target;
-            if (thisFileInput.files) { // Don't attempt to load if no file was selected
+
+            if (thisFileInput.files && thisFileInput.files.length > 0) {
                 this.fileToUpload = thisFileInput.files[0];
 
-                // If user owns the project, or user has changed the project,
-                // we must confirm with the user that they really intend to
-                // replace it. (If they don't own the project and haven't
-                // changed it, no need to confirm.)
                 let uploadAllowed = true;
+
                 if (userOwnsProject || (projectChanged && isShowingWithoutId)) {
-                    uploadAllowed = confirm( // eslint-disable-line no-alert
+                    uploadAllowed = confirm(
                         intl.formatMessage(sharedMessages.replaceProjectWarning)
                     );
                 }
+
                 if (uploadAllowed) {
-                    // Don't update file handle until after confirming replace.
                     const handle = thisFileInput.handle;
+
                     if (handle) {
                         if (this.fileToUpload.name.endsWith('.sb3')) {
                             this.props.onSetFileHandle(handle);
@@ -156,58 +158,68 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                         }
                     }
 
-                    // cues step 4
                     this.props.requestProjectUpload(loadingState);
                 } else {
-                    // skips ahead to step 7
                     this.removeFileObjects();
                 }
+
                 this.props.closeFileMenu();
             }
         }
-        // step 4 is below, in mapDispatchToProps
 
-        // step 5: called from componentDidUpdate when project state shows
-        // that project data has finished "uploading" into the browser
+        // Step 4: Redux handles project upload state.
+
+        // Step 5: Wait for project upload state.
         handleFinishedLoadingUpload () {
             this.expectingFileUploadFinish = false;
+
             if (this.fileToUpload && this.fileReader) {
-                // begin to read data from the file. When finished,
-                // cues step 6 using the reader's onload callback
                 this.fileReader.readAsArrayBuffer(this.fileToUpload);
             } else {
                 this.props.cancelFileUpload(this.props.loadingState);
-                // skip ahead to step 7
                 this.removeFileObjects();
             }
         }
-        // used in step 6 below
+
+        // Get project title, always using configured save extension.
         getProjectTitleFromFilename (fileInputFilename) {
-    if (!fileInputFilename) return '';
+            if (!fileInputFilename) return '';
 
-    // Accept Scratch and CattyMod project extensions
-    const matches = fileInputFilename.match(/^(.*)\.(?:sb[23]?|cmp)$/i);
+            const matches = fileInputFilename.match(
+                /^(.*)\.(?:cmp|pmp|snail|zip|sb|sb2|sb3)$/i
+            );
 
-    if (!matches) return '';
+            if (!matches) return '';
 
-    // Always use the .cmp extension
-    return `${matches[1].substring(0, 100)}.cmp`;
-}
-        // step 6: attached as a handler on our FileReader object; called when
-        // file upload raw data is available in the reader
+            // Read configured save file type.
+            const saveFileType =
+                localStorage.getItem('cattymod:saveFileType') || 'cmp';
+
+            // Remove leading dot if present.
+            const extension = saveFileType.replace(/^\./, '');
+
+            return `${matches[1].substring(0, 100)}.${extension}`;
+        }
+
+        // Step 6: Load project data.
         onload () {
             if (this.fileReader) {
                 this.props.onLoadingStarted();
+
                 const filename = this.fileToUpload && this.fileToUpload.name;
                 let loadingSuccess = false;
-                // tw: stop when loading new project
+
                 this.props.vm.quit();
+
                 this.props.vm.loadProject(this.fileReader.result)
                     .then(() => {
                         if (filename) {
-                            const uploadedProjectTitle = this.getProjectTitleFromFilename(filename);
+                            const uploadedProjectTitle =
+                                this.getProjectTitleFromFilename(filename);
+
                             this.props.onSetProjectTitle(uploadedProjectTitle);
                         }
+
                         this.props.vm.renderer.draw();
                         loadingSuccess = true;
                     })
@@ -216,27 +228,29 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                         this.props.onLoadingFailed(error);
                     })
                     .then(() => {
-                        this.props.onLoadingFinished(this.props.loadingState, loadingSuccess);
-                        // go back to step 7: whether project loading succeeded
-                        // or failed, reset file objects
+                        this.props.onLoadingFinished(
+                            this.props.loadingState,
+                            loadingSuccess
+                        );
+
                         this.removeFileObjects();
                     });
             }
         }
-        // step 7: remove the <input> element from the DOM and clear reader and
-        // fileToUpload reference, so those objects can be garbage collected
+
+        // Step 7: Clean up temporary objects.
         removeFileObjects () {
-            if (this.inputElement) {
-                this.inputElement.value = null;
-                document.body.removeChild(this.inputElement);
+            if (this.inputElement && this.inputElement.parentNode) {
+                this.inputElement.parentNode.removeChild(this.inputElement);
             }
+
             this.inputElement = null;
             this.fileReader = null;
             this.fileToUpload = null;
         }
+
         render () {
             const {
-                /* eslint-disable no-unused-vars */
                 cancelFileUpload,
                 closeFileMenu: closeFileMenuProp,
                 isLoadingUpload,
@@ -250,9 +264,9 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                 projectChanged,
                 requestProjectUpload: requestProjectUploadProp,
                 userOwnsProject,
-                /* eslint-enable no-unused-vars */
                 ...componentProps
             } = this.props;
+
             return (
                 <React.Fragment>
                     <WrappedComponent
@@ -290,14 +304,20 @@ const SBFileUploaderHOC = function (WrappedComponent) {
         }),
         onSetFileHandle: PropTypes.func
     };
+
     SBFileUploaderComponent.defaultProps = {
-        showOpenFilePicker: typeof showOpenFilePicker === 'function' && !navigator.userAgent.includes('Android') ?
-            window.showOpenFilePicker.bind(window) :
-            null
+        showOpenFilePicker:
+            typeof window !== 'undefined' &&
+            typeof window.showOpenFilePicker === 'function' &&
+            !navigator.userAgent.includes('Android') ?
+                window.showOpenFilePicker.bind(window) :
+                null
     };
+
     const mapStateToProps = (state, ownProps) => {
         const loadingState = state.scratchGui.projectState.loadingState;
         const user = state.session && state.session.session && state.session.session.user;
+
         return {
             isLoadingUpload: getIsLoadingUpload(loadingState),
             isShowingProject: getIsShowingProject(loadingState),
@@ -309,33 +329,41 @@ const SBFileUploaderHOC = function (WrappedComponent) {
             vm: state.scratchGui.vm
         };
     };
+
     const mapDispatchToProps = (dispatch, ownProps) => ({
-        cancelFileUpload: loadingState => dispatch(onLoadedProject(loadingState, false, false)),
+        cancelFileUpload: loadingState =>
+            dispatch(onLoadedProject(loadingState, false, false)),
+
         closeFileMenu: () => dispatch(closeFileMenu()),
+
         onLoadingFailed: error => {
             dispatch(setProjectError(error));
             dispatch(openInvalidProjectModal());
         },
-        // transition project state from loading to regular, and close
-        // loading screen and file menu
+
         onLoadingFinished: (loadingState, success) => {
             dispatch(onLoadedProject(loadingState, ownProps.canSave, success));
             dispatch(closeLoadingProject());
             dispatch(closeFileMenu());
         },
-        // show project loading screen
+
         onLoadingStarted: () => dispatch(openLoadingProject()),
+
         onSetProjectTitle: title => dispatch(setProjectTitle(title)),
-        // step 4: transition the project state so we're ready to handle the new
-        // project data. When this is done, the project state transition will be
-        // noticed by componentDidUpdate()
-        requestProjectUpload: loadingState => dispatch(requestProjectUpload(loadingState)),
+
+        requestProjectUpload: loadingState =>
+            dispatch(requestProjectUpload(loadingState)),
+
         onSetFileHandle: fileHandle => dispatch(setFileHandle(fileHandle))
     });
-    // Allow incoming props to override redux-provided props. Used to mock in tests.
+
     const mergeProps = (stateProps, dispatchProps, ownProps) => Object.assign(
-        {}, stateProps, dispatchProps, ownProps
+        {},
+        stateProps,
+        dispatchProps,
+        ownProps
     );
+
     return injectIntl(connect(
         mapStateToProps,
         mapDispatchToProps,
