@@ -1625,7 +1625,7 @@ const menuBar = (
                                 />
                                 <span className={styles.collapsibleLabel}>
                                     <FormattedMessage
-                                        defaultMessage="Addons"
+                                        defaultMessage="Mods"
                                         description="Button to open addon settings"
                                         id="tw.menuBar.addons"
                                     />
