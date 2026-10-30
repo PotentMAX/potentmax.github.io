@@ -1,3 +1,4 @@
+
 import bindAll from 'lodash.bindall';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -26,12 +27,13 @@ import {
 } from '../reducers/menus';
 
 /**
- * Higher Order Component to provide behavior for loading local project files into editor.
+ * Higher Order Component to provide behavior for loading local project files.
  */
 const SBFileUploaderHOC = function (WrappedComponent) {
     class SBFileUploaderComponent extends React.Component {
         constructor (props) {
             super(props);
+
             bindAll(this, [
                 'createFileObjects',
                 'getProjectTitleFromFilename',
@@ -72,7 +74,17 @@ const SBFileUploaderHOC = function (WrappedComponent) {
             this.fileReader = new FileReader();
             this.fileReader.onload = this.onload;
 
-            if (this.props.showOpenFilePicker) {
+            // Detect Apple devices, including iPads running desktop mode.
+            const isAppleDevice =
+                /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                (
+                    navigator.platform === 'MacIntel' &&
+                    navigator.maxTouchPoints > 1
+                );
+
+            // Apple devices use the standard HTML file picker.
+            // Other devices can use the File System Access API.
+            if (this.props.showOpenFilePicker && !isAppleDevice) {
                 (async () => {
                     try {
                         const [handle] = await this.props.showOpenFilePicker({
@@ -112,10 +124,13 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                     }
                 })();
             } else {
+                // Standard HTML file picker for Apple devices.
                 this.inputElement = document.createElement('input');
+
                 this.inputElement.accept =
                     '.cmp,.pmp,.snail,.zip,.sb,.sb2,.sb3';
-                this.inputElement.style = 'display: none;';
+
+                this.inputElement.style.display = 'none';
                 this.inputElement.type = 'file';
                 this.inputElement.onchange = this.handleChange;
 
@@ -156,6 +171,8 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                         } else {
                             this.props.onSetFileHandle(null);
                         }
+                    } else {
+                        this.props.onSetFileHandle(null);
                     }
 
                     this.props.requestProjectUpload(loadingState);
@@ -191,11 +208,9 @@ const SBFileUploaderHOC = function (WrappedComponent) {
 
             if (!matches) return '';
 
-            // Read configured save file type.
             const saveFileType =
                 localStorage.getItem('cattymod:saveFileType') || 'cmp';
 
-            // Remove leading dot if present.
             const extension = saveFileType.replace(/^\./, '');
 
             return `${matches[1].substring(0, 100)}.${extension}`;
