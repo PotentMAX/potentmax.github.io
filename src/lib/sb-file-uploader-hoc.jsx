@@ -27,13 +27,12 @@ import {
 } from '../reducers/menus';
 
 /**
- * Higher Order Component to provide behavior for loading local project files.
+ * Higher Order Component to provide behavior for loading local project files into editor.
  */
 const SBFileUploaderHOC = function (WrappedComponent) {
     class SBFileUploaderComponent extends React.Component {
         constructor (props) {
             super(props);
-
             bindAll(this, [
                 'createFileObjects',
                 'getProjectTitleFromFilename',
@@ -61,6 +60,17 @@ const SBFileUploaderHOC = function (WrappedComponent) {
             this.removeFileObjects();
         }
 
+        // Detect Apple devices.
+        isAppleDevice () {
+            const userAgent = navigator.userAgent || '';
+            const platform = navigator.platform || '';
+
+            return (
+                /iPhone|iPad|iPod|Macintosh|MacIntel|MacPPC|Mac68K/i.test(userAgent) ||
+                (platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+            );
+        }
+
         // Step 1: Begin file upload.
         handleStartSelectingFileUpload () {
             this.expectingFileUploadFinish = true;
@@ -71,40 +81,34 @@ const SBFileUploaderHOC = function (WrappedComponent) {
         createFileObjects () {
             this.removeFileObjects();
 
+            const isAppleDevice = this.isAppleDevice();
+
             this.fileReader = new FileReader();
             this.fileReader.onload = this.onload;
 
-            // Detect Apple devices, including iPads running desktop mode.
-            const isAppleDevice =
-                /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-                (
-                    navigator.platform === 'MacIntel' &&
-                    navigator.maxTouchPoints > 1
-                );
-
-            // Apple devices use the standard HTML file picker.
-            // Other devices can use the File System Access API.
-            if (this.props.showOpenFilePicker && !isAppleDevice) {
+            if (this.props.showOpenFilePicker) {
                 (async () => {
                     try {
                         const [handle] = await this.props.showOpenFilePicker({
                             multiple: false,
-                            types: [
-                                {
-                                    description: 'CattyMod Project',
-                                    accept: {
-                                        '*/*': [
-                                            '.cmp',
-                                            '.pmp',
-                                            '.snail',
-                                            '.zip',
-                                            '.sb',
-                                            '.sb2',
-                                            '.sb3'
-                                        ]
+                            ...(isAppleDevice ? {} : {
+                                types: [
+                                    {
+                                        description: 'CattyMod Project',
+                                        accept: {
+                                            '*/*': [
+                                                '.cmp',
+                                                '.pmp',
+                                                '.snail',
+                                                '.zip',
+                                                '.sb',
+                                                '.sb2',
+                                                '.sb3'
+                                            ]
+                                        }
                                     }
-                                }
-                            ]
+                                ]
+                            })
                         });
 
                         const file = await handle.getFile();
@@ -124,13 +128,15 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                     }
                 })();
             } else {
-                // Standard HTML file picker for Apple devices.
                 this.inputElement = document.createElement('input');
 
-                this.inputElement.accept =
+                // Apple devices accept all file formats.
+                // Other devices only accept supported project formats.
+                this.inputElement.accept = isAppleDevice ?
+                    '*/*' :
                     '.cmp,.pmp,.snail,.zip,.sb,.sb2,.sb3';
 
-                this.inputElement.style.display = 'none';
+                this.inputElement.style = 'display: none;';
                 this.inputElement.type = 'file';
                 this.inputElement.onchange = this.handleChange;
 
@@ -171,8 +177,6 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                         } else {
                             this.props.onSetFileHandle(null);
                         }
-                    } else {
-                        this.props.onSetFileHandle(null);
                     }
 
                     this.props.requestProjectUpload(loadingState);
@@ -208,9 +212,11 @@ const SBFileUploaderHOC = function (WrappedComponent) {
 
             if (!matches) return '';
 
+            // Read configured save file type.
             const saveFileType =
                 localStorage.getItem('cattymod:saveFileType') || 'cmp';
 
+            // Remove leading dot if present.
             const extension = saveFileType.replace(/^\./, '');
 
             return `${matches[1].substring(0, 100)}.${extension}`;
