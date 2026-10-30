@@ -21,7 +21,7 @@ import render from './app-target';
 
 const onExportSettings = settings => {
     const blob = new Blob([JSON.stringify(settings)]);
-    downloadBlob('cattymod-addon-settings.json', blob);
+    downloadBlob('cattymod-mods-settings.json', blob);
 };
 
 render((
