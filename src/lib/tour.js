@@ -1,4 +1,4 @@
-export function startTour() {
+export function startTour(onComplete) {
   if (window.__cattyModTour) return;
 
   function getTarget(step) {
