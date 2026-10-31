@@ -240,8 +240,12 @@ class Interface extends React.Component {
         this.handleUpdateProjectTitle = this.handleUpdateProjectTitle.bind(this);
     }
     componentDidMount () {
-        this.cleanupMenuAnimations = initMenuAnimations();
+    this.cleanupMenuAnimations = initMenuAnimations();
+
+    if (localStorage.getItem('cattymod:removeScratch') === 'true') {
+        this.cleanupScratchRemoval = removeScratch();
     }
+}
     componentDidUpdate (prevProps) {
         if (prevProps.isLoading && !this.props.isLoading) {
             loadServiceWorker();
