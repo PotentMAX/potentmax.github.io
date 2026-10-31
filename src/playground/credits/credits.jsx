@@ -8,6 +8,14 @@ import {applyGuiColors} from '../../lib/themes/guiHelpers';
 import {detectTheme} from '../../lib/themes/themePersistance';
 import UserData from './users';
 
+// Load the CattyMod navbar
+if (!document.querySelector('script[src="https://cattymod.app/assets/navbar.js"]') &&
+    !document.querySelector('.cattymod-navbar-wrapper')) {
+    const navbarScript = document.createElement('script');
+    navbarScript.src = 'https://cattymod.app/assets/navbar.js';
+    document.head.appendChild(navbarScript);
+}
+
 /* eslint-disable react/jsx-no-literals */
 
 applyGuiColors(detectTheme());
