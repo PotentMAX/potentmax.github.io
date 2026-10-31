@@ -1126,16 +1126,9 @@
                 <div class="setting-row">
                   <div class="setting-info">
                     <div class="setting-title">Custom File Type</div>
-                    <div class="setting-description"> Choose whether to use a custom default file type when saving projects. </div>
+                    <div class="setting-description"> Choose the file type when saving projects. </div>
                   </div>
-                  <label class="switch">
-                    <input type="checkbox" id="custom-file-type-toggle">
-                    <span class="slider"></span>
-                  </label>
-                </div>
-                <div id="custom-file-type-options" class="setting-options collapsed">
-                  <label class="input-label" for="project-file-type-select"> Custom Default File Type </label>
-                  <select id="project-file-type-select" class="setting-select" aria-label="Custom Default File Type">
+                  <select id="project-file-type-select" class="setting-select" aria-label="Default File Type">
                     <option value="cmp">CMP (CattyMod Project)</option>
                     <option value="pmp">PMP (PenguinMod Project)</option>
                     <option value="snail">Snail (Snail IDE Project)</option>
@@ -1144,7 +1137,6 @@
                   </select>
                 </div>
               </div>
-            </div>
           </section>
           <!-- NAVBAR -->
           <section id="page-navbar" class="page" style="display:none;">
@@ -1248,6 +1240,13 @@
                     <span class="slider"></span>
                   </label>
                 </div>
+              </div>
+            </div>
+            <div class="section">
+              <div class="section-title">Projects</div>
+              <div class="card about-card">
+                <div class="setting-title"> Looking for Picture in Picture? </div>
+                <div class="setting-description">Picture in Picture is available in the Projects category. Click <a href="#projects" style="color:var(--accent); text-decoration:none; font-weight:600;">Projects</a> in the sidebar to find it! </div>
               </div>
             </div>
           </section>
@@ -1710,9 +1709,6 @@
       }
       /* ------------------------- Custom File Type ------------------------- */
       const projectFileTypeSelect = document.getElementById("project-file-type-select");
-      const customFileTypeToggle = document.getElementById("custom-file-type-toggle");
-      const customFileTypeOptions = document.getElementById("custom-file-type-options");
-      const CUSTOM_FILE_TYPE_ENABLED_KEY = "cattymod:customFileTypeEnabled";
       const VALID_PROJECT_FILE_TYPES = ["cmp", "pmp", "snail", "sb3", "zip"];
 
       function getPreferredProjectFileType() {
@@ -1720,23 +1716,10 @@
         return VALID_PROJECT_FILE_TYPES.includes(saved) ? saved : "cmp";
       }
 
-      function getCustomFileTypeEnabled() {
-        return localStorage.getItem(CUSTOM_FILE_TYPE_ENABLED_KEY) === "true";
-      }
-
-      function updateCustomFileTypeVisibility() {
-        if (!customFileTypeOptions || !customFileTypeToggle) return;
-        customFileTypeOptions.classList.toggle("collapsed", !customFileTypeToggle.checked);
-      }
-
       function loadPreferredProjectFileType() {
         if (projectFileTypeSelect) {
           projectFileTypeSelect.value = getPreferredProjectFileType();
         }
-        if (customFileTypeToggle) {
-          customFileTypeToggle.checked = getCustomFileTypeEnabled();
-        }
-        updateCustomFileTypeVisibility();
       }
 
       function setPreferredProjectFileType(type) {
@@ -1745,13 +1728,6 @@
         }
         localStorage.setItem(SAVE_FILE_TYPE_KEY, type);
         loadPreferredProjectFileType();
-      }
-      if (customFileTypeToggle) {
-        customFileTypeToggle.addEventListener("change", () => {
-          localStorage.setItem(CUSTOM_FILE_TYPE_ENABLED_KEY, customFileTypeToggle.checked ? "true" : "false");
-          updateCustomFileTypeVisibility();
-          applySettingsAccent();
-        });
       }
       if (projectFileTypeSelect) {
         projectFileTypeSelect.addEventListener("change", () => {
@@ -1948,9 +1924,6 @@
           loadMenuOptionVisibility();
         }
         if (event.key === SAVE_FILE_TYPE_KEY || event.key === null) {
-          loadPreferredProjectFileType();
-        }
-        if (event.key === CUSTOM_FILE_TYPE_ENABLED_KEY || event.key === null) {
           loadPreferredProjectFileType();
         }
       });
