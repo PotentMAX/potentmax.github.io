@@ -1,3 +1,4 @@
+
 export function startTour(onComplete) {
   if (window.__cattyModTour) return;
 
@@ -24,6 +25,10 @@ function startTourNow(onComplete) {
     }
 
     return null;
+  }
+
+  function markTourCompleted() {
+    localStorage.setItem('cattymod:tourCompleted', 'true');
   }
 
   var steps = [
@@ -231,7 +236,6 @@ function startTourNow(onComplete) {
 
   window.__cattyModTour = true;
 
-  // Save original history methods
   var originalPushState = history.pushState;
   var originalReplaceState = history.replaceState;
 
@@ -254,7 +258,6 @@ function startTourNow(onComplete) {
 
     window.removeEventListener('popstate', checkTourURL);
 
-    // Restore history methods
     if (history.pushState === wrappedPushState) {
       history.pushState = originalPushState;
     }
@@ -266,7 +269,6 @@ function startTourNow(onComplete) {
     delete window.__cattyModTour;
   }
 
-  // Detect SPA navigation
   var wrappedPushState = function (...args) {
     originalPushState.apply(this, args);
     checkTourURL();
@@ -282,7 +284,6 @@ function startTourNow(onComplete) {
 
   window.addEventListener('popstate', checkTourURL);
 
-  // Check current URL immediately
   checkTourURL();
 
   function render() {
@@ -308,7 +309,11 @@ function startTourNow(onComplete) {
       </svg>
     `;
 
-    closeBtn.onclick = cleanup;
+    closeBtn.onclick = function () {
+      markTourCompleted();
+      cleanup();
+    };
+
     box.appendChild(closeBtn);
 
     // Welcome and end screens
@@ -389,7 +394,11 @@ function startTourNow(onComplete) {
       var skipBtn = document.createElement('button');
       skipBtn.className = 'cm-btn cm-btn-sec';
       skipBtn.textContent = 'Skip';
-      skipBtn.onclick = cleanup;
+
+      skipBtn.onclick = function () {
+        markTourCompleted();
+        cleanup();
+      };
 
       btnGroup.appendChild(skipBtn);
 
@@ -418,6 +427,7 @@ function startTourNow(onComplete) {
       endBtn.textContent = 'End Tour';
 
       endBtn.onclick = function () {
+        markTourCompleted();
         cleanup();
 
         if (typeof onComplete === 'function') {
