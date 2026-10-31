@@ -246,9 +246,23 @@ class Interface extends React.Component {
         this.cleanupScratchRemoval = removeScratch();
     }
 
-    // Automatically show the tour on the first editor visit
+    this.showTourIfNeeded();
+}
+    componentDidUpdate (prevProps) {
+    if (prevProps.isLoading && !this.props.isLoading) {
+        loadServiceWorker();
+    }
+
+    // Player -> Editor transition
+    if (prevProps.isPlayerOnly && !this.props.isPlayerOnly) {
+        this.showTourIfNeeded();
+    }
+}
+
+    showTourIfNeeded () {
     if (
         !this.props.isPlayerOnly &&
+        window.location.pathname.includes('editor') &&
         localStorage.getItem('cattymod:tourCompleted') !== 'true'
     ) {
         startTour(() => {
@@ -256,11 +270,7 @@ class Interface extends React.Component {
         });
     }
 }
-    componentDidUpdate (prevProps) {
-        if (prevProps.isLoading && !this.props.isLoading) {
-            loadServiceWorker();
-        }
-    }
+    
     componentWillUnmount () {
     if (this.cleanupMenuAnimations) {
         this.cleanupMenuAnimations();
