@@ -1,4 +1,3 @@
-
 import bindAll from 'lodash.bindall';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -203,25 +202,16 @@ const SBFileUploaderHOC = function (WrappedComponent) {
         }
 
         // Get project title, always using configured save extension.
+
         getProjectTitleFromFilename (fileInputFilename) {
-            if (!fileInputFilename) return '';
+    if (!fileInputFilename) return '';
 
-            const matches = fileInputFilename.match(
-                /^(.*)\.(?:cmp|pmp|snail|zip|sb|sb2|sb3)$/i
-            );
+    // Remove the file extension.
+    const filename = fileInputFilename.replace(/\.[^/.]+$/, '');
 
-            if (!matches) return '';
-
-            // Read configured save file type.
-            const saveFileType =
-                localStorage.getItem('cattymod:saveFileType') || 'cmp';
-
-            // Remove leading dot if present.
-            const extension = saveFileType.replace(/^\./, '');
-
-            return `${matches[1].substring(0, 100)}.${extension}`;
-        }
-
+    // Limit project title to 100 characters.
+    return filename.substring(0, 100);
+}
         // Step 6: Load project data.
         onload () {
             if (this.fileReader) {
