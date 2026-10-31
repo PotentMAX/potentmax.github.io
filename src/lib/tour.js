@@ -1,4 +1,3 @@
-
 export function startTour(onComplete) {
   if (window.__cattyModTour) return;
 
@@ -35,7 +34,7 @@ function startTourNow(onComplete) {
     {
       type: 'welcome',
       title: 'Welcome to CattyMod!',
-      desc: 'Hey! Let\'s take a quick look around!'
+      desc: "Hey! Let's take a quick look around!"
     },
     {
       type: 'target',
@@ -91,6 +90,44 @@ function startTourNow(onComplete) {
       0% { box-shadow: 0 0 0 0px rgba(76, 151, 255, 0.7); }
       70% { box-shadow: 0 0 0 10px rgba(76, 151, 255, 0); }
       100% { box-shadow: 0 0 0 0px rgba(76, 151, 255, 0); }
+    }
+
+    @keyframes cmModalEnter {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -45%) scale(0.85);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
+    @keyframes cmModalExit {
+      from {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      to {
+        opacity: 0;
+        transform: translate(-50%, -45%) scale(0.85);
+      }
+    }
+
+    .cm-box.cm-enter {
+      animation: cmModalEnter 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .cm-box.cm-exit {
+      animation: cmModalExit 0.25s ease-in forwards;
+      pointer-events: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cm-box.cm-enter,
+      .cm-box.cm-exit {
+        animation-duration: 0.01ms;
+      }
     }
 
     .cm-highlight {
@@ -269,6 +306,30 @@ function startTourNow(onComplete) {
     delete window.__cattyModTour;
   }
 
+  function animatedCleanup(callback) {
+    if (!box || box.classList.contains('cm-exit')) return;
+
+    box.classList.remove('cm-enter');
+    box.classList.add('cm-exit');
+
+    var finished = false;
+
+    function finish() {
+      if (finished) return;
+      finished = true;
+
+      cleanup();
+
+      if (typeof callback === 'function') {
+        callback();
+      }
+    }
+
+    box.addEventListener('animationend', finish, { once: true });
+
+    setTimeout(finish, 350);
+  }
+
   var wrappedPushState = function (...args) {
     originalPushState.apply(this, args);
     checkTourURL();
@@ -311,7 +372,7 @@ function startTourNow(onComplete) {
 
     closeBtn.onclick = function () {
       markTourCompleted();
-      cleanup();
+      animatedCleanup();
     };
 
     box.appendChild(closeBtn);
@@ -397,7 +458,7 @@ function startTourNow(onComplete) {
 
       skipBtn.onclick = function () {
         markTourCompleted();
-        cleanup();
+        animatedCleanup();
       };
 
       btnGroup.appendChild(skipBtn);
@@ -428,11 +489,12 @@ function startTourNow(onComplete) {
 
       endBtn.onclick = function () {
         markTourCompleted();
-        cleanup();
 
-        if (typeof onComplete === 'function') {
-          onComplete();
-        }
+        animatedCleanup(() => {
+          if (typeof onComplete === 'function') {
+            onComplete();
+          }
+        });
       };
 
       btnGroup.appendChild(endBtn);
@@ -459,6 +521,13 @@ function startTourNow(onComplete) {
     }
 
     box.appendChild(btnGroup);
+
+    // Welcome and ending entrance animation
+    if (step.type === 'welcome' || step.type === 'end') {
+      box.classList.remove('cm-enter');
+      void box.offsetWidth;
+      box.classList.add('cm-enter');
+    }
   }
 
   render();
