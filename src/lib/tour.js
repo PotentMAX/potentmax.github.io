@@ -1,7 +1,6 @@
+
 export function startTour(onComplete) {
   if (window.__cattyModTour) return;
-
-  
 
   setTimeout(() => {
     startTourNow(onComplete);
@@ -233,6 +232,19 @@ function startTourNow(onComplete) {
 
   window.__cattyModTour = true;
 
+  // Save original history methods
+  var originalPushState = history.pushState;
+  var originalReplaceState = history.replaceState;
+
+  function checkTourURL() {
+    if (
+      window.location.pathname === '/' ||
+      window.location.pathname === '/fullscreen'
+    ) {
+      cleanup();
+    }
+  }
+
   function cleanup() {
     var hl = document.querySelectorAll('.cm-highlight');
 
@@ -241,10 +253,42 @@ function startTourNow(onComplete) {
     if (overlay) overlay.remove();
     if (style) style.remove();
 
+    window.removeEventListener('popstate', checkTourURL);
+
+    // Restore history methods
+    if (history.pushState === wrappedPushState) {
+      history.pushState = originalPushState;
+    }
+
+    if (history.replaceState === wrappedReplaceState) {
+      history.replaceState = originalReplaceState;
+    }
+
     delete window.__cattyModTour;
   }
 
+  // Detect SPA navigation
+  var wrappedPushState = function (...args) {
+    originalPushState.apply(this, args);
+    checkTourURL();
+  };
+
+  var wrappedReplaceState = function (...args) {
+    originalReplaceState.apply(this, args);
+    checkTourURL();
+  };
+
+  history.pushState = wrappedPushState;
+  history.replaceState = wrappedReplaceState;
+
+  window.addEventListener('popstate', checkTourURL);
+
+  // Check current URL immediately
+  checkTourURL();
+
   function render() {
+    if (!window.__cattyModTour) return;
+
     document.querySelectorAll('.cm-highlight').forEach(el => {
       el.classList.remove('cm-highlight');
     });
@@ -373,13 +417,14 @@ function startTourNow(onComplete) {
       var endBtn = document.createElement('button');
       endBtn.className = 'cm-btn cm-btn-primary';
       endBtn.textContent = 'End Tour';
-      endBtn.onclick = function () {
-    cleanup();
 
-    if (typeof onComplete === 'function') {
-        onComplete();
-    }
-};
+      endBtn.onclick = function () {
+        cleanup();
+
+        if (typeof onComplete === 'function') {
+          onComplete();
+        }
+      };
 
       btnGroup.appendChild(endBtn);
     } else {
