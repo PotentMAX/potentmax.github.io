@@ -46,6 +46,7 @@ import InvalidEmbed from '../components/tw-invalid-embed/invalid-embed.jsx';
 import {APP_NAME} from '../lib/brand.js';
 import {initMenuAnimations} from '../lib/menuAnimations.js';
 import {removeScratch} from '../lib/removeScratch.js';
+import {startTour} from '../lib/tour.js';
 
 import styles from './interface.css';
 
@@ -245,12 +246,32 @@ class Interface extends React.Component {
     if (localStorage.getItem('cattymod:removeScratch') === 'true') {
         this.cleanupScratchRemoval = removeScratch();
     }
+
+    this.showTourIfNeeded();
 }
     componentDidUpdate (prevProps) {
-        if (prevProps.isLoading && !this.props.isLoading) {
-            loadServiceWorker();
-        }
+    if (prevProps.isLoading && !this.props.isLoading) {
+        loadServiceWorker();
     }
+
+    // Player -> Editor transition
+    if (prevProps.isPlayerOnly && !this.props.isPlayerOnly) {
+        this.showTourIfNeeded();
+    }
+}
+
+    showTourIfNeeded () {
+    if (
+        !this.props.isPlayerOnly &&
+        window.location.pathname.includes('editor') &&
+        localStorage.getItem('cattymod:tourCompleted') !== 'true'
+    ) {
+        startTour(() => {
+            localStorage.setItem('cattymod:tourCompleted', 'true');
+        });
+    }
+}
+    
     componentWillUnmount () {
     if (this.cleanupMenuAnimations) {
         this.cleanupMenuAnimations();
