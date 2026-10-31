@@ -17,7 +17,6 @@ export function initMenuAnimations({
   const selector = selectors.join(",");
   const previousVisibility = new WeakMap();
   const animations = new WeakMap();
-
   const reducedMotion = window.matchMedia?.(
     "(prefers-reduced-motion: reduce)"
   ).matches;
@@ -40,14 +39,8 @@ export function initMenuAnimations({
 
     const animation = element.animate(
       [
-        {
-          clipPath: "inset(0 0 100% 0)",
-          opacity: 0,
-        },
-        {
-          clipPath: "inset(0 0 0 0)",
-          opacity: 1,
-        },
+        { clipPath: "inset(0 0 100% 0)", opacity: 0 },
+        { clipPath: "inset(0 0 0 0)", opacity: 1 },
       ],
       {
         duration,
@@ -73,7 +66,14 @@ export function initMenuAnimations({
       const hidden = isHidden(element);
       const previous = previousVisibility.get(element);
 
+      // The outer submenu handles its own animation.
+      // Do not animate its nested menu separately.
+      const isNestedMenu =
+        element.matches('[class*="menu_menu_"]') &&
+        element.parentElement?.matches('[class*="menu_submenu_"]');
+
       if (
+        !isNestedMenu &&
         !hidden &&
         (previous === true || (previous === undefined && initialized))
       ) {
@@ -86,7 +86,6 @@ export function initMenuAnimations({
     initialized = true;
   }
 
-  // Record initial visibility without animating menus on page load.
   scan();
 
   const observer = new MutationObserver(scan);
