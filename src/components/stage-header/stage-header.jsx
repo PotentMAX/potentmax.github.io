@@ -12,8 +12,7 @@ import Controls from '../../containers/controls.jsx';
 import {getStageDimensions, getMinWidth} from '../../lib/screen-utils';
 import {STAGE_DISPLAY_SIZES, STAGE_SIZE_MODES} from '../../lib/layout-constants';
 
-import fullScreenIcon from './icon--fullscreen.svg';
-import unFullScreenIcon from './icon--unfullscreen.svg';
+import {Maximize, Minimize} from 'lucide-react';
 import largeStageIcon from '!../../lib/tw-recolor/build!./icon--large-stage.svg';
 import smallStageIcon from '!../../lib/tw-recolor/build!./icon--small-stage.svg';
 import fullStageIcon from '!../../lib/tw-recolor/build!./icon--full-stage.svg';
@@ -110,13 +109,12 @@ const StageHeaderComponent = function (props) {
                     onClick={onSetStageUnFullScreen}
                     onKeyPress={onKeyPress}
                 >
-                    <img
-                        alt={props.intl.formatMessage(messages.unFullScreenMessage)}
-                        className={styles.stageButtonIcon}
-                        draggable={false}
-                        src={unFullScreenIcon}
-                        title={props.intl.formatMessage(messages.fullscreenControl)}
-                    />
+                    <Minimize
+    className={styles.stageButtonIcon}
+    size={20}
+    aria-label={props.intl.formatMessage(messages.unFullScreenMessage)}
+    title={props.intl.formatMessage(messages.fullscreenControl)}
+/>
                 </Button>
             </div>
         ) : FullscreenAPI.available() ? (
@@ -125,13 +123,12 @@ const StageHeaderComponent = function (props) {
                     className={styles.stageButton}
                     onClick={onSetStageFullScreen}
                 >
-                    <img
-                        alt={props.intl.formatMessage(messages.fullScreenMessage)}
-                        className={styles.stageButtonIcon}
-                        draggable={false}
-                        src={fullScreenIcon}
-                        title={props.intl.formatMessage(messages.fullscreenControl)}
-                    />
+                    <Maximize
+    className={styles.stageButtonIcon}
+    size={20}
+    aria-label={props.intl.formatMessage(messages.fullScreenMessage)}
+    title={props.intl.formatMessage(messages.fullscreenControl)}
+/>
                 </Button>
             </div>
         ) : null;
