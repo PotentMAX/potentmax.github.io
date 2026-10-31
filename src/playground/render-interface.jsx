@@ -45,6 +45,7 @@ import runAddons from '../addons/entry';
 import InvalidEmbed from '../components/tw-invalid-embed/invalid-embed.jsx';
 import {APP_NAME} from '../lib/brand.js';
 import {initMenuAnimations} from '../lib/menuAnimations.js';
+import {removeScratch} from '../lib/removeScratch.js';
 
 import styles from './interface.css';
 
@@ -249,6 +250,10 @@ class Interface extends React.Component {
     componentWillUnmount () {
     if (this.cleanupMenuAnimations) {
         this.cleanupMenuAnimations();
+    }
+
+    if (this.cleanupScratchRemoval) {
+        this.cleanupScratchRemoval();
     }
 }
     handleUpdateProjectTitle (title, isDefault) {
