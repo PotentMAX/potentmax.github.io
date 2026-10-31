@@ -245,6 +245,16 @@ class Interface extends React.Component {
     if (localStorage.getItem('cattymod:removeScratch') === 'true') {
         this.cleanupScratchRemoval = removeScratch();
     }
+
+    // Automatically show the tour on the first editor visit
+    if (
+        !this.props.isPlayerOnly &&
+        localStorage.getItem('cattymod:tourCompleted') !== 'true'
+    ) {
+        startTour(() => {
+            localStorage.setItem('cattymod:tourCompleted', 'true');
+        });
+    }
 }
     componentDidUpdate (prevProps) {
         if (prevProps.isLoading && !this.props.isLoading) {
