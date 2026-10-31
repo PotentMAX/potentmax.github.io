@@ -1,4 +1,3 @@
-
 export function startTour(onComplete) {
   if (window.__cattyModTour) return;
 
@@ -31,12 +30,12 @@ function startTourNow(onComplete) {
     {
       type: 'welcome',
       title: 'Welcome to CattyMod!',
-      desc: 'Let me show you round!'
+      desc: 'Hey! Let\'s take a quick look around!'
     },
     {
       type: 'target',
       text: 'Settings',
-      desc: 'Here you can manage your settings.'
+      desc: 'Here you can configure CattyMod.'
     },
     {
       type: 'target',
@@ -46,12 +45,12 @@ function startTourNow(onComplete) {
     {
       type: 'target',
       text: 'Edit',
-      desc: 'Configure your project and undo changes.'
+      desc: 'Here you can configure your project and undo changes.'
     },
     {
       type: 'target',
       sel: '.gui_blocks-wrapper_1ccgf, .blocklySvg, .scratchCategoryMenu',
-      desc: 'Here is the CattyMod Blocks palette and workspace.'
+      desc: 'This is where you can code using blocks!'
     },
     {
       type: 'target',
