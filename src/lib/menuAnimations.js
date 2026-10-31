@@ -1,11 +1,7 @@
-
 const DEFAULT_SELECTORS = [
   '[class*="menu_menu_"]',
   '[class*="menu_submenu_"]',
-  '[class*="settings-menu_menu_"]',
-  '[class*="settings-menu_submenu_"]',
-  '[class*="settings-menu_dropdown_"]',
-  '[class*="settings-menu_options_"]',
+  '[class*="settings-menu_"]',
 ];
 
 export function initMenuAnimations({
@@ -40,7 +36,6 @@ export function initMenuAnimations({
   function animateOpen(element) {
     if (reducedMotion) return;
 
-    // Cancel an unfinished animation if the menu opens again.
     animations.get(element)?.cancel();
 
     const animation = element.animate(
@@ -78,9 +73,10 @@ export function initMenuAnimations({
       const hidden = isHidden(element);
       const previous = previousVisibility.get(element);
 
-      // Animate when an existing menu becomes visible.
-      // Also animate newly added menus after initialization.
-      if (!hidden && (previous === true || (previous === undefined && initialized))) {
+      if (
+        !hidden &&
+        (previous === true || (previous === undefined && initialized))
+      ) {
         animateOpen(element);
       }
 
@@ -90,24 +86,26 @@ export function initMenuAnimations({
     initialized = true;
   }
 
-  // Record the initial state without animating everything on page load.
+  // Record initial visibility without animating menus on page load.
   scan();
 
   const observer = new MutationObserver(scan);
 
-  observer.observe(root === document ? document.documentElement : root, {
-    subtree: true,
-    childList: true,
-    attributes: true,
-    attributeFilter: [
-      "class",
-      "style",
-      "hidden",
-      "aria-hidden",
-    ],
-  });
+  observer.observe(
+    root === document ? document.documentElement : root,
+    {
+      subtree: true,
+      childList: true,
+      attributes: true,
+      attributeFilter: [
+        "class",
+        "style",
+        "hidden",
+        "aria-hidden",
+      ],
+    }
+  );
 
-  // Return cleanup function for React.
   return function cleanupMenuAnimations() {
     observer.disconnect();
 
