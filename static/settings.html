@@ -1243,6 +1243,21 @@
               </div>
             </div>
             <div class="section">
+              <div class="section-title">Scratch</div>
+              <div class="card">
+                <div class="setting-row">
+                  <div class="setting-info">
+                    <div class="setting-title">Show Scratch Elements</div>
+                    <div class="setting-description"> Show or hide Scratch-related elements on the CattyMod homepage, including the project input and featured projects. </div>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="scratch-elements-toggle" aria-label="Show Scratch elements">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="section">
               <div class="section-title">Projects</div>
               <div class="card about-card">
                 <div class="setting-title"> Looking for Picture in Picture? </div>
@@ -1638,6 +1653,35 @@
           setCommunityEnabled(communityEnabledToggle.checked);
         });
       }
+      /* ------------------------- Scratch Elements ------------------------- */
+const scratchElementsToggle = document.getElementById("scratch-elements-toggle");
+const SCRATCH_REMOVE_KEY = "cattymod:removeScratch";
+
+function getScratchElementsEnabled() {
+    const value = localStorage.getItem(SCRATCH_REMOVE_KEY);
+
+    if (value === null) return true;
+
+    return value !== "true";
+}
+
+function setScratchElementsEnabled(enabled) {
+    localStorage.setItem(SCRATCH_REMOVE_KEY, String(!enabled));
+    loadScratchElements();
+}
+
+function loadScratchElements() {
+    if (!scratchElementsToggle) return;
+
+    scratchElementsToggle.checked = getScratchElementsEnabled();
+    applySettingsAccent();
+}
+
+if (scratchElementsToggle) {
+    scratchElementsToggle.addEventListener("change", () => {
+        setScratchElementsEnabled(scratchElementsToggle.checked);
+    });
+}
       /* ------------------------- Navbar Logo Visibility ------------------------- */
       const logoVisibleToggle = document.getElementById("logo-visible-toggle");
 
@@ -1926,6 +1970,9 @@
         if (event.key === SAVE_FILE_TYPE_KEY || event.key === null) {
           loadPreferredProjectFileType();
         }
+        if (event.key === SCRATCH_REMOVE_KEY || event.key === null) {
+          loadScratchElements();
+        }
       });
       /* ------------------------- Danger Zone ------------------------- */
       const dangerZoneToggle = document.getElementById("danger-zone-toggle");
@@ -2043,6 +2090,7 @@
       loadMenuOptionVisibility();
       loadNavPosition();
       loadPageFromHash();
+      loadScratchElements();
       /* ------------------------- Lucide Icons ------------------------- */
       lucide.createIcons();
     </script>
