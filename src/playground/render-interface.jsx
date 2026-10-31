@@ -44,6 +44,7 @@ import {loadServiceWorker} from './load-service-worker';
 import runAddons from '../addons/entry';
 import InvalidEmbed from '../components/tw-invalid-embed/invalid-embed.jsx';
 import {APP_NAME} from '../lib/brand.js';
+import {initMenuAnimations} from '../lib/menuAnimations.js';
 
 import styles from './interface.css';
 
@@ -237,11 +238,19 @@ class Interface extends React.Component {
         super(props);
         this.handleUpdateProjectTitle = this.handleUpdateProjectTitle.bind(this);
     }
+    componentDidMount () {
+        this.cleanupMenuAnimations = initMenuAnimations();
+    }
     componentDidUpdate (prevProps) {
         if (prevProps.isLoading && !this.props.isLoading) {
             loadServiceWorker();
         }
     }
+    componentWillUnmount () {
+    if (this.cleanupMenuAnimations) {
+        this.cleanupMenuAnimations();
+    }
+}
     handleUpdateProjectTitle (title, isDefault) {
         if (isDefault || !title) {
             document.title = `${APP_NAME} - ${this.props.intl.formatMessage(messages.defaultTitle)}`;
