@@ -269,14 +269,25 @@ const getPreferredFileType = () => {
     return validTypes.includes(savedType) ? savedType : 'cmp';
 };
 
+
 const getProjectFilename = (curTitle, defaultTitle) => {
     let filenameTitle = curTitle;
+
     if (!filenameTitle || filenameTitle.length === 0) {
         filenameTitle = defaultTitle;
     }
 
-    return `${filenameTitle.substring(0, 100)}.${getPreferredFileType()}`;
+    const fileType = getPreferredFileType();
+
+    // Remove an existing supported project extension.
+    filenameTitle = filenameTitle.replace(
+        /\.(?:cmp|zip|pmp|snail|sb3|sb2|sb)$/i,
+        ''
+    );
+
+    return `${filenameTitle.substring(0, 100)}.${fileType}`;
 };
+
 
 SB3Downloader.propTypes = {
     children: PropTypes.func,
