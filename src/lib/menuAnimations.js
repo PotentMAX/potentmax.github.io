@@ -62,30 +62,25 @@ export function initMenuAnimations({
   let initialized = false;
 
   function scan() {
-    root.querySelectorAll(selector).forEach((element) => {
-      const hidden = isHidden(element);
-      const previous = previousVisibility.get(element);
+  root.querySelectorAll(selector).forEach((element) => {
+    const hidden = isHidden(element);
+    const previous = previousVisibility.get(element);
 
-      // The outer submenu handles its own animation.
-      // Do not animate its nested menu separately.
-      const isNestedMenu =
-        element.matches('[class*="menu_menu_"]') &&
-        element.parentElement?.matches('[class*="menu_submenu_"]');
+    const isSubmenu = element.matches('[class*="menu_submenu_"]');
 
-      if (
-        !isNestedMenu &&
-        !hidden &&
-        (previous === true || (previous === undefined && initialized))
-      ) {
-        animateOpen(element);
-      }
+    if (
+      !isSubmenu &&
+      !hidden &&
+      (previous === true || (previous === undefined && initialized))
+    ) {
+      animateOpen(element);
+    }
 
-      previousVisibility.set(element, hidden);
-    });
+    previousVisibility.set(element, hidden);
+  });
 
-    initialized = true;
-  }
-
+  initialized = true;
+}
   scan();
 
   const observer = new MutationObserver(scan);
