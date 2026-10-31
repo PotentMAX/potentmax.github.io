@@ -44,7 +44,7 @@ import {loadServiceWorker} from './load-service-worker';
 import runAddons from '../addons/entry';
 import InvalidEmbed from '../components/tw-invalid-embed/invalid-embed.jsx';
 import {APP_NAME} from '../lib/brand.js';
-import {initMenuAnimations} from '../lib/menu-animations.js';
+import {initMenuAnimations} from '../lib/menuAnimations.js';
 
 import styles from './interface.css';
 
