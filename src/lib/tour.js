@@ -1,6 +1,14 @@
 export function startTour(onComplete) {
   if (window.__cattyModTour) return;
 
+  
+
+  setTimeout(() => {
+    startTourNow(onComplete);
+  }, 1500);
+}
+
+function startTourNow(onComplete) {
   function getTarget(step) {
     if (step.sel) return document.querySelector(step.sel);
 
