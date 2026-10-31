@@ -1,4 +1,3 @@
-
 /**
  * Copyright (C) 2021 Thomas Weber
  *
@@ -17,7 +16,7 @@
 
 import './import-first';
 
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 
 import Interface from './render-interface.jsx';
 import render from './app-target';
@@ -28,16 +27,20 @@ import {
 } from '../lib/customDefaultProject';
 
 const PlayerOnlyInterface = props => {
+    const hasRestoredUrl = useRef(false);
+
     useEffect(() => {
         const cleanupGoIcon = initializeGoIcon();
 
         initializeCustomDefaultProject();
 
-        // Restore the previous non-fullscreen URL when fullscreen exits.
+        // Restore the previous non-fullscreen URL only once per page load.
         const previousUrl =
             sessionStorage.getItem('scratch-previous-mode-url') || '/';
 
         const handleFullscreenChange = () => {
+            if (hasRestoredUrl.current) return;
+
             const store = window.ReduxStore;
             if (!store) return;
 
@@ -55,6 +58,9 @@ const PlayerOnlyInterface = props => {
                     targetUrl
                 );
             }
+
+            // Mark as done, so this never runs again during this page load.
+            hasRestoredUrl.current = true;
         };
 
         const store = window.ReduxStore;
