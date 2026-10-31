@@ -209,13 +209,12 @@ const StageHeaderComponent = function (props) {
                                 className={styles.stageButton}
                                 onClick={onSetStageFullScreen}
                             >
-                                <img
-                                    alt={props.intl.formatMessage(messages.fullStageSizeMessage)}
-                                    className={styles.stageButtonIcon}
-                                    draggable={false}
-                                    src={fullScreenIcon}
-                                    title={props.intl.formatMessage(messages.fullscreenControl)}
-                                />
+                                <Maximize
+    className={styles.stageButtonIcon}
+    size={20}
+    aria-label={props.intl.formatMessage(messages.fullScreenMessage)}
+    title={props.intl.formatMessage(messages.fullscreenControl)}
+/>
                             </Button>
                         </div>
                     </div>
