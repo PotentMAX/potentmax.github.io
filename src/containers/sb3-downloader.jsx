@@ -1,4 +1,3 @@
-
 import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -133,12 +132,23 @@ class SB3Downloader extends React.Component {
         }
     }
 
-    saveToLastFileOrNew () {
-        if (this.props.fileHandle) {
-            return this.saveToLastFile();
-        }
-        return this.saveAsNew();
+saveToLastFileOrNew () {
+    const preferredType = getPreferredFileType();
+    const currentName = this.props.fileHandle ?
+        this.props.fileHandle.name : '';
+
+    const currentExtension = currentName.match(/\.(cmp|pmp|snail|sb3|zip)$/i);
+
+    if (
+        this.props.fileHandle &&
+        currentExtension &&
+        currentExtension[1].toLowerCase() === preferredType
+    ) {
+        return this.saveToLastFile();
     }
+
+    return this.saveAsNew();
+}
 
     async saveToHandle (handle) {
         if (!this.props.canSaveProject) {
