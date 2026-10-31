@@ -1296,38 +1296,61 @@ const menuBar = (
                                 )}
 
                                 <MenuSection>
-                                    <TurboMode>
-                                        {(toggleTurboMode, {turboMode}) => (
-                                            <MenuItem onClick={toggleTurboMode}>
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    width="24"
-                                                    height="24"
-                                                    viewBox="0 0 24 24"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    strokeWidth="2"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                >
-                                                    <path d="M15.914 4a1.5 1.5 0 0 0-2.474-1.561l-9 9A1.5 1.5 0 0 0 5.5 14h4.002a.5.5 0 0 1 .471.666L8.086 20a1.5 1.5 0 0 0 2.475 1.56l9-9A1.5 1.5 0 0 0 18.5 10h-3.997a.5.5 0 0 1-.472-.667z" />
-                                                </svg>
-                                                {turboMode ? (
-                                                    <FormattedMessage
-                                                        defaultMessage="Turn off Turbo Mode"
-                                                        description="Menu bar item for turning off turbo mode"
-                                                        id="gui.menuBar.turboModeOff"
-                                                    />
-                                                ) : (
-                                                    <FormattedMessage
-                                                        defaultMessage="Turn on Turbo Mode"
-                                                        description="Menu bar item for turning on turbo mode"
-                                                        id="gui.menuBar.turboModeOn"
-                                                    />
-                                                )}
-                                            </MenuItem>
-                                        )}
-                                    </TurboMode>
+                                    
+<TurboMode>
+    {(toggleTurboMode, {turboMode}) => (
+        <MenuItem onClick={toggleTurboMode}>
+            {turboMode ? (
+                <>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="lucide lucide-zap-off"
+                    >
+                        <path d="M10.768 5.111 13.44 2.44a1.5 1.5 0 0 1 2.474 1.561l-1.633 4.625" />
+                        <path d="m18.889 13.232.672-.672A1.5 1.5 0 0 0 18.5 10h-2.844" />
+                        <path d="m2 2 20 20" />
+                        <path d="m7.94 7.94-3.5 3.499A1.5 1.5 0 0 0 5.5 14h4.002a.5.5 0 0 1 .471.666L8.086 20a1.5 1.5 0 0 0 2.475 1.56l5.5-5.5" />
+                    </svg>
+                    <FormattedMessage
+                        defaultMessage="Turn off Turbo Mode"
+                        description="Menu bar item for turning off turbo mode"
+                        id="gui.menuBar.turboModeOff"
+                    />
+                </>
+            ) : (
+                <>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="lucide lucide-zap"
+                    >
+                        <path d="M15.914 4a1.5 1.5 0 0 0-2.474-1.561l-9 9A1.5 1.5 0 0 0 5.5 14h4.002a.5.5 0 0 1 .471.666L8.086 20a1.5 1.5 0 0 0 2.475 1.56l9-9A1.5 1.5 0 0 0 18.5 10h-3.997a.5.5 0 0 1-.472-.667z" />
+                    </svg>
+                    <FormattedMessage
+                        defaultMessage="Turn on Turbo Mode"
+                        description="Menu bar item for turning on turbo mode"
+                        id="gui.menuBar.turboModeOn"
+                    />
+                </>
+            )}
+        </MenuItem>
+    )}
+</TurboMode>
 
                                     <FramerateChanger>
                                         {(changeFramerate, {framerate}) => (
