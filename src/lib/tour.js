@@ -365,7 +365,13 @@ export function startTour(onComplete) {
       var endBtn = document.createElement('button');
       endBtn.className = 'cm-btn cm-btn-primary';
       endBtn.textContent = 'End Tour';
-      endBtn.onclick = cleanup;
+      endBtn.onclick = function () {
+    cleanup();
+
+    if (typeof onComplete === 'function') {
+        onComplete();
+    }
+};
 
       btnGroup.appendChild(endBtn);
     } else {
