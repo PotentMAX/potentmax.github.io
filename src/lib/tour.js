@@ -34,27 +34,27 @@ export function startTour(onComplete) {
     {
       type: 'target',
       text: 'File',
-      desc: 'Open, save, or manage your files here.'
+      desc: 'Open, save, and create new projects here.'
     },
     {
       type: 'target',
       text: 'Edit',
-      desc: 'Quick access to editing options.'
+      desc: 'Configure your project and undo changes.'
     },
     {
       type: 'target',
       sel: '.gui_blocks-wrapper_1ccgf, .blocklySvg, .scratchCategoryMenu',
-      desc: 'This is the Scratch Blocks palette and workspace.'
+      desc: 'Here is the CattyMod Blocks palette and workspace.'
     },
     {
       type: 'target',
       sel: '.stage_stage_1fD7k',
-      desc: 'This is the Stage, where your project comes to life!'
+      desc: 'Here is the Stage, where your project comes to life!'
     },
     {
       type: 'target',
       sel: '.controls_controls-container_2xinB',
-      desc: 'Use these controls to start, pause, or stop your project.'
+      desc: 'Use these controls to start, pause, and stop your project.'
     },
     {
       type: 'end',
