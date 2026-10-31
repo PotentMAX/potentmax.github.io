@@ -46,6 +46,7 @@ import InvalidEmbed from '../components/tw-invalid-embed/invalid-embed.jsx';
 import {APP_NAME} from '../lib/brand.js';
 import {initMenuAnimations} from '../lib/menuAnimations.js';
 import {removeScratch} from '../lib/removeScratch.js';
+import {startTour} from '../lib/tour.js';
 
 import styles from './interface.css';
 
