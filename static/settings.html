@@ -361,7 +361,10 @@
         overflow: hidden;
         max-height: 220px;
         opacity: 1;
-        transition: max-height .22s ease, opacity .18s ease, padding .22s ease;
+        transition:
+          max-height .22s ease,
+          opacity .18s ease,
+          padding .22s ease;
       }
 
       .setting-options.collapsed {
@@ -888,6 +891,44 @@
         max-width: none;
         padding: 30px 24px 24px;
       }
+
+      #custom-file-type-options .setting-select {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+      }
+
+      /* Responsive setting rows */
+      .setting-row {
+        flex-wrap: wrap;
+      }
+
+      .setting-info {
+        flex: 1 1 180px;
+      }
+
+      .setting-row>.setting-select {
+        max-width: 100%;
+      }
+
+      @media (max-width: 700px) {
+        .setting-row {
+          gap: 12px;
+        }
+
+        .setting-info {
+          flex: 1 1 100%;
+        }
+
+        .setting-row>.setting-select {
+          width: 100%;
+          min-width: 0;
+        }
+
+        .setting-row>.switch {
+          margin-left: auto;
+        }
+      }
     </style>
   </head>
   <body>
@@ -1084,10 +1125,17 @@
                 </div>
                 <div class="setting-row">
                   <div class="setting-info">
-                    <div class="setting-title">Preferred Project File Type</div>
-                    <div class="setting-description"> Choose the file format used when saving projects. Most users should keep CMP selected.</div>
+                    <div class="setting-title">Custom File Type</div>
+                    <div class="setting-description"> Choose whether to use a custom default file type when saving projects. </div>
                   </div>
-                  <select id="project-file-type-select" class="setting-select" aria-label="Preferred Project File Type">
+                  <label class="switch">
+                    <input type="checkbox" id="custom-file-type-toggle">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+                <div id="custom-file-type-options" class="setting-options collapsed">
+                  <label class="input-label" for="project-file-type-select"> Custom Default File Type </label>
+                  <select id="project-file-type-select" class="setting-select" aria-label="Custom Default File Type">
                     <option value="cmp">CMP (CattyMod Project)</option>
                     <option value="pmp">PMP (PenguinMod Project)</option>
                     <option value="snail">Snail (Snail IDE Project)</option>
@@ -1390,7 +1438,7 @@
           applySettingsAccent();
         }
       });
-      const commitVersion = "YOUR_COMMIT_SHA_HERE";
+      const commitVersion = "e45d95199c35517a305134a45e0e031f3fe56de9";
       const commitLink = document.getElementById("commit-link");
       if (commitLink && commitVersion) {
         const shortCommit = commitVersion.slice(0, 7);
@@ -1660,8 +1708,11 @@
           setPipEnabled(pipEnabledToggle.checked);
         });
       }
-      /* ------------------------- Preferred Project File Type ------------------------- */
+      /* ------------------------- Custom File Type ------------------------- */
       const projectFileTypeSelect = document.getElementById("project-file-type-select");
+      const customFileTypeToggle = document.getElementById("custom-file-type-toggle");
+      const customFileTypeOptions = document.getElementById("custom-file-type-options");
+      const CUSTOM_FILE_TYPE_ENABLED_KEY = "cattymod:customFileTypeEnabled";
       const VALID_PROJECT_FILE_TYPES = ["cmp", "pmp", "snail", "sb3", "zip"];
 
       function getPreferredProjectFileType() {
@@ -1669,9 +1720,23 @@
         return VALID_PROJECT_FILE_TYPES.includes(saved) ? saved : "cmp";
       }
 
+      function getCustomFileTypeEnabled() {
+        return localStorage.getItem(CUSTOM_FILE_TYPE_ENABLED_KEY) === "true";
+      }
+
+      function updateCustomFileTypeVisibility() {
+        if (!customFileTypeOptions || !customFileTypeToggle) return;
+        customFileTypeOptions.classList.toggle("collapsed", !customFileTypeToggle.checked);
+      }
+
       function loadPreferredProjectFileType() {
-        if (!projectFileTypeSelect) return;
-        projectFileTypeSelect.value = getPreferredProjectFileType();
+        if (projectFileTypeSelect) {
+          projectFileTypeSelect.value = getPreferredProjectFileType();
+        }
+        if (customFileTypeToggle) {
+          customFileTypeToggle.checked = getCustomFileTypeEnabled();
+        }
+        updateCustomFileTypeVisibility();
       }
 
       function setPreferredProjectFileType(type) {
@@ -1680,6 +1745,13 @@
         }
         localStorage.setItem(SAVE_FILE_TYPE_KEY, type);
         loadPreferredProjectFileType();
+      }
+      if (customFileTypeToggle) {
+        customFileTypeToggle.addEventListener("change", () => {
+          localStorage.setItem(CUSTOM_FILE_TYPE_ENABLED_KEY, customFileTypeToggle.checked ? "true" : "false");
+          updateCustomFileTypeVisibility();
+          applySettingsAccent();
+        });
       }
       if (projectFileTypeSelect) {
         projectFileTypeSelect.addEventListener("change", () => {
@@ -1876,6 +1948,9 @@
           loadMenuOptionVisibility();
         }
         if (event.key === SAVE_FILE_TYPE_KEY || event.key === null) {
+          loadPreferredProjectFileType();
+        }
+        if (event.key === CUSTOM_FILE_TYPE_ENABLED_KEY || event.key === null) {
           loadPreferredProjectFileType();
         }
       });
