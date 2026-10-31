@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import bindAll from 'lodash.bindall';
 import bowser from 'bowser';
 import React from 'react';
+import {MessagesSquare} from 'lucide-react';
 
 import VM from 'scratch-vm';
 
@@ -1758,22 +1759,35 @@ const menuBar = (
                     )}
 
                     <div className={styles.menuBarItem}>
-                        <a
-                            className={styles.feedbackLink}
-                            href="https://cattymod.app/feedback/"
-                            rel="noopener noreferrer"
-                            target="_blank"
-                        >
-                            <Button className={styles.feedbackButton}>
-                                <FormattedMessage
-                                    defaultMessage="{APP_NAME} Feedback"
-                                    description="Button to give feedback in the menu bar"
-                                    id="tw.feedbackButton"
-                                    values={{APP_NAME}}
-                                />
-                            </Button>
-                        </a>
-                    </div>
+    <a
+        className={styles.feedbackLink}
+        href="https://cattymod.app/feedback/"
+        rel="noopener noreferrer"
+        target="_blank"
+    >
+        <Button className={styles.feedbackButton}>
+            <span
+                style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                }}
+            >
+                <MessagesSquare
+                    size={18}
+                    color="currentColor"
+                    strokeWidth={2}
+                />
+                <FormattedMessage
+                    defaultMessage="{APP_NAME} Feedback"
+                    description="Button to give feedback in the menu bar"
+                    id="tw.feedbackButton"
+                    values={{APP_NAME}}
+                />
+            </span>
+        </Button>
+    </a>
+</div>
                 </div>
 
                 <div className={styles.accountInfoGroup}>
