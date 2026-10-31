@@ -5,7 +5,7 @@ export function startTour(onComplete) {
 
   setTimeout(() => {
     startTourNow(onComplete);
-  }, 1500);
+  }, 500);
 }
 
 function startTourNow(onComplete) {
